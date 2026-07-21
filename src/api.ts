@@ -164,6 +164,7 @@ export type AvisItem = {
   message: string;
   stars: number;
   createdAt: string;
+  source?: string;
 };
 
 export function fetchAvis() {

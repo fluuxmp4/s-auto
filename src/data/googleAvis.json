@@ -1,0 +1,234 @@
+[
+  {
+    "id": "google-1",
+    "name": "amix1",
+    "message": "Franchement, au top ! J'y suis allé pour refaire ma carrosserie et le résultat, nickel. L'équipe est super sympa, honnête et ils ne cherchent pas à gonfler la facture. Le travail est propre et rapide, merci",
+    "stars": 5,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-2",
+    "name": "Ludo Muller",
+    "message": "Je viens de récupérer mon véhicule pour un choc à l’arrière, elle est ressortie comme neuve. Ce sont des vrais professionnels et passionnés par leur métier ! La réparation a été ultra rapide et en plus mon véhicule est ressorti, propre …",
+    "stars": 5,
+    "createdAt": "2024-01-02T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-3",
+    "name": "Elsa",
+    "message": "Mille merci. Ce garage a été plus que réactif pour réparer la carrosserie de ma Megane. Elle est comme neuve. Le suivi avec Bryan s’est très bien déroulé. Je reviendrais à coup sûr ! Que dire… je recommande les yeux fermés !",
+    "stars": 5,
+    "createdAt": "2024-01-03T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-4",
+    "name": "Mathias C",
+    "message": "Excellente carrosserie. Suite à un petit accident, je suis passé par cette carrosserie pour réparer ma voiture et le résultat est excellent. Bryan le carrossier est très sympa et très professionnel !\nN’hésitez pas",
+    "stars": 5,
+    "createdAt": "2024-01-04T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-5",
+    "name": "Philippe Yoeun",
+    "message": "Parfait pro et sympathique c est mon garage officiel depuis qu’il est ouvert",
+    "stars": 5,
+    "createdAt": "2024-01-05T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-6",
+    "name": "Amandine Saab",
+    "message": "Que dire ?…. Enfin des carrossiers compétents et surtout honnêtes !\nJe ne peux que recommander cette carrosserie dont professionnalisme rime avec amabilité, réactivité et expertise ! Tout simplement merci …",
+    "stars": 5,
+    "createdAt": "2024-01-06T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-7",
+    "name": "Nathalie Bellon",
+    "message": "Je recommande cette carrosserie,bon travail, rapide, et ouvert le samedi!",
+    "stars": 5,
+    "createdAt": "2024-01-07T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-8",
+    "name": "Sofyen M",
+    "message": "Je suis très satisfait des services de cette carrosserie. Mon véhicule a été réparé rapidement et avec un résultat impeccable. On ne voit plus aucune trace de l'accident. Je recommande vivement !",
+    "stars": 5,
+    "createdAt": "2024-01-08T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-9",
+    "name": "azaratoks *",
+    "message": "Super garage, le carrossier est excellent. Il m'a réparé ma voiture comme neuf, plus rien, plus aucune trace de mon accident, tout avait disparu. Merci beaucoup, j'ai même eu le droit à un nettoyage de ma voiture, aspirateur et intérieur tout propre.",
+    "stars": 5,
+    "createdAt": "2024-01-09T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-10",
+    "name": "30 000",
+    "message": "yes j'y comprend rien en voiture mais ce garagiste m'a bien aidé",
+    "stars": 5,
+    "createdAt": "2024-01-10T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-11",
+    "name": "Laurine Dsbt",
+    "message": "Au top ! Rien à redire !\nMa voiture est sortie comme neuve de plus, le personnel est très accueillant et professionnel. …",
+    "stars": 5,
+    "createdAt": "2024-01-11T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-12",
+    "name": "LayLucifer",
+    "message": "Super gentil et efficace, le gérant a remis mon parre choc qui s'était légèrement demi.\nJ'ai fait une demi heure de route pour aller les voirs et je ne suis pas déçu ☺️",
+    "stars": 5,
+    "createdAt": "2024-01-12T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-13",
+    "name": "S Pan13",
+    "message": "La peinture sur notre véhicule à été refaite avec soin et professionnalisme. Un bon rapport qualité/ prix.",
+    "stars": 5,
+    "createdAt": "2024-01-13T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-14",
+    "name": "Aymein Rahali",
+    "message": "Bonjour garage au top je tiens à vous dire que le garage s auto est au top super je suis taxi y ont finit la voiture en temps et en heure du travail de pro je vous poste une photo",
+    "stars": 5,
+    "createdAt": "2024-01-14T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-15",
+    "name": "Melissa Mendy",
+    "message": "Super service, et accueil. Ma carrosserie a été réparée en rien de temps. Simple, rapide et efficace. Je recommande",
+    "stars": 5,
+    "createdAt": "2024-01-15T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-16",
+    "name": "Isabelle Comtet",
+    "message": "Très bon travail\nJe recommande !",
+    "stars": 5,
+    "createdAt": "2024-01-16T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-17",
+    "name": "Katia _m_69",
+    "message": "Un grand merci pour notre BMW! Nous allons roulé en sécurité, merci pour votre disponibilité et votre sérieux !",
+    "stars": 5,
+    "createdAt": "2024-01-17T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-18",
+    "name": "Juan Eskiuss",
+    "message": "Ça frôle la Perfection !!\nTravail propre et impeccable 👍👍\nMême mieux que du neuf . …",
+    "stars": 5,
+    "createdAt": "2024-01-18T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-19",
+    "name": "Jeanne Guyon de Chemilly",
+    "message": "Un carrossier super pro qui a fait un travail impeccable ! Je recommande !",
+    "stars": 5,
+    "createdAt": "2024-01-19T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-20",
+    "name": "Vallet Melanie",
+    "message": "J'ai fait confiance aux précédents avis google, je recommande les compétences de Sébastien.\nN'hésitez pas !",
+    "stars": 5,
+    "createdAt": "2024-01-20T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-21",
+    "name": "Christian kim",
+    "message": "Super boulot 😉\nJe recommande fortement !!!\nEncore merci ☺️ …",
+    "stars": 5,
+    "createdAt": "2024-01-21T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-22",
+    "name": "Vincent Ploton",
+    "message": "Personnel très serviable, je recommande !",
+    "stars": 5,
+    "createdAt": "2024-01-22T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-23",
+    "name": "Delomier Pierre",
+    "message": "Carrossier très pro et arrangeant. Travail efficace et de qualité ! Des petits accrocs de carrosserie sur ma Clio, qui ont été réparés dans la journée. Pas de chichis, service impeccable et patron souriant",
+    "stars": 5,
+    "createdAt": "2024-01-23T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-24",
+    "name": "Client Mister (“?”)",
+    "message": "Les avis parle d'eux même! Remplacement de mon pare-brise avec pièce d’origine, et pare-choc refait. Il font aussi la réparation des pattes de phare cassées (au lieu de changer le phare) . Pro, efficace. Service excellent !",
+    "stars": 5,
+    "createdAt": "2024-01-24T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-25",
+    "name": "Rémi Santos",
+    "message": "Très satisfait du travail sur ma Tesla. Les jantes étaient vraiment très abîmées et le résultat est impeccable, je ne pensais pas qu'elles pouvaient être refaites aussi bien. Le pare-brise a également été remplacé parfaitement. Je recommande !",
+    "stars": 5,
+    "createdAt": "2024-01-25T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-26",
+    "name": "Jess",
+    "message": "Service très réactif et garagiste au top. Mes phares ont été lustrés, ça n'a plus rien avoir ! Prix imbattables 50€ les 2 phares optiques vous ne trouverez pas mieux ailleurs croyez moi",
+    "stars": 5,
+    "createdAt": "2024-01-26T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-27",
+    "name": "Soun Sa",
+    "message": "Je recommande vivement cette carrosserie auto ! Après avoir lu plusieurs avis positifs sur Google, j’ai décidé d’y aller et je ne suis vraiment pas déçu. L’équipe est professionnelle, accueillante et à l’écoute. Les travaux ont été réalisés …",
+    "stars": 5,
+    "createdAt": "2024-01-27T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-28",
+    "name": "ouadir mouaze",
+    "message": "Top, réactif et professionnel.\nJe recommande",
+    "stars": 5,
+    "createdAt": "2024-01-28T00:00:00.000Z",
+    "source": "google"
+  },
+  {
+    "id": "google-29",
+    "name": "Alexandre Million (Neok)",
+    "message": "",
+    "stars": 5,
+    "createdAt": "2024-01-29T00:00:00.000Z",
+    "source": "google"
+  }
+]

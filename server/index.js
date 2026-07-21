@@ -68,36 +68,41 @@ function normalizeMode(value) {
   return MODE_IDS.includes(id) ? id : DEFAULT_MODE;
 }
 
-const DEFAULT_AVIS = [
-  {
-    id: "seed-1",
-    name: "Client Google",
-    message:
-      "Mon véhicule a été réparé rapidement et avec un résultat impeccable.",
-    stars: 5,
-    createdAt: "2024-01-01T10:00:00.000Z",
-  },
-  {
-    id: "seed-2",
-    name: "Région lyonnaise",
-    message:
-      "Accueil pro, devis clair et finition nickel. Je recommande pour la carrosserie et le pare-brise.",
-    stars: 5,
-    createdAt: "2024-03-01T10:00:00.000Z",
-  },
-  {
-    id: "seed-3",
-    name: "Client satisfait",
-    message:
-      "Prise en charge assurance sans stress, délais respectés. Atelier sérieux à Saint-Genis-Laval.",
-    stars: 5,
-    createdAt: "2024-06-01T10:00:00.000Z",
-  },
-];
+const DEFAULT_AVIS = (() => {
+  try {
+    const p = path.join(ROOT, "..", "src", "data", "googleAvis.json");
+    if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, "utf8"));
+  } catch {
+    /* fallback below */
+  }
+  return [
+    {
+      id: "seed-1",
+      name: "Client Google",
+      message:
+        "Mon véhicule a été réparé rapidement et avec un résultat impeccable.",
+      stars: 5,
+      createdAt: "2024-01-01T10:00:00.000Z",
+      source: "google",
+    },
+  ];
+})();
+
+const AVIS_VERSION = 2;
 
 function ensureAvis(db) {
-  if (!Array.isArray(db.avis)) {
-    db.avis = DEFAULT_AVIS.map((a) => ({ ...a }));
+  const userAvis = Array.isArray(db.avis)
+    ? db.avis.filter(
+        (a) =>
+          a &&
+          !String(a.id || "").startsWith("seed-") &&
+          !String(a.id || "").startsWith("google-") &&
+          a.source !== "google",
+      )
+    : [];
+  if (db.avisVersion !== AVIS_VERSION || !Array.isArray(db.avis)) {
+    db.avis = [...userAvis, ...DEFAULT_AVIS.map((a) => ({ ...a }))];
+    db.avisVersion = AVIS_VERSION;
     writeDb(db);
   }
   return db.avis;
@@ -125,6 +130,7 @@ function readDb() {
       mode: DEFAULT_MODE,
       devis: [],
       avis: DEFAULT_AVIS.map((a) => ({ ...a })),
+      avisVersion: AVIS_VERSION,
       pellicule: [],
       manager: { username: MANAGER_USER, passwordHash },
     };
@@ -382,6 +388,7 @@ app.post("/api/avis", (req, res) => {
     message,
     stars,
     createdAt: new Date().toISOString(),
+    source: "site",
   };
 
   const db = readDb();
