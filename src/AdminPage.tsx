@@ -4,9 +4,11 @@ import {
   applyTheme,
   deleteAvis,
   deleteDevis,
+  deletePellicule,
   fetchAvis,
   fetchDevis,
   fetchHours,
+  fetchPellicule,
   fetchTheme,
   getToken,
   login,
@@ -14,12 +16,14 @@ import {
   saveTheme,
   setToken,
   updateDevisStatus,
+  uploadPellicule,
   THEME_OPTIONS,
   MODE_OPTIONS,
   type AvisItem,
   type DevisItem,
   type DevisStatus,
   type HourRow,
+  type PelliculePhoto,
   type ThemeId,
   type ModeId,
 } from "./api";
@@ -54,11 +58,12 @@ export default function AdminPage() {
   const [loginError, setLoginError] = useState("");
   const [loggingIn, setLoggingIn] = useState(false);
 
-  const [tab, setTab] = useState<"devis" | "horaires" | "apparence" | "avis">(
-    "devis",
-  );
+  const [tab, setTab] = useState<
+    "devis" | "horaires" | "apparence" | "avis" | "pellicule"
+  >("devis");
   const [devis, setDevis] = useState<DevisItem[]>([]);
   const [avisList, setAvisList] = useState<AvisItem[]>([]);
+  const [pellicule, setPellicule] = useState<PelliculePhoto[]>([]);
   const [hours, setHours] = useState<HourRow[]>([]);
   const [theme, setTheme] = useState<ThemeId>("classique");
   const [mode, setMode] = useState<ModeId>("clair");
@@ -68,6 +73,7 @@ export default function AdminPage() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [savingTheme, setSavingTheme] = useState(false);
+  const [uploadingPellicule, setUploadingPellicule] = useState(false);
 
   const filtered = useMemo(
     () =>
@@ -85,11 +91,12 @@ export default function AdminPage() {
     setLoading(true);
     setError("");
     try {
-      const [d, h, t, a] = await Promise.all([
+      const [d, h, t, a, p] = await Promise.all([
         fetchDevis(),
         fetchHours(),
         fetchTheme(),
         fetchAvis(),
+        fetchPellicule(),
       ]);
       setDevis(d.devis);
       setHours(h.hours);
@@ -97,6 +104,7 @@ export default function AdminPage() {
       setMode(t.mode || "clair");
       applyTheme(t.theme, t.mode || "clair");
       setAvisList(a.avis || []);
+      setPellicule(p.photos || []);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Chargement impossible");
       if (String(err).includes("Session") || String(err).includes("autoris")) {
@@ -199,6 +207,33 @@ export default function AdminPage() {
     }
   }
 
+  async function handlePelliculeUpload(files: FileList | null) {
+    if (!files?.length) return;
+    setMessage("");
+    setError("");
+    setUploadingPellicule(true);
+    try {
+      const res = await uploadPellicule(Array.from(files));
+      setPellicule(res.pellicule);
+      setMessage(`${res.photos.length} photo(s) ajoutée(s) à la pellicule`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload impossible");
+    } finally {
+      setUploadingPellicule(false);
+    }
+  }
+
+  async function removePelliculePhoto(id: string) {
+    if (!confirm("Supprimer cette photo de la pellicule ?")) return;
+    try {
+      await deletePellicule(id);
+      setPellicule((prev) => prev.filter((p) => p.id !== id));
+      setMessage("Photo supprimée");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Suppression impossible");
+    }
+  }
+
   if (!token) {
     return (
       <div className="admin-login">
@@ -274,6 +309,13 @@ export default function AdminPage() {
           onClick={() => setTab("avis")}
         >
           Avis ({avisList.length})
+        </button>
+        <button
+          type="button"
+          className={tab === "pellicule" ? "is-active" : ""}
+          onClick={() => setTab("pellicule")}
+        >
+          Pellicule ({pellicule.length})
         </button>
         <button
           type="button"
@@ -495,6 +537,51 @@ export default function AdminPage() {
               <li className="admin__muted">Aucun avis pour le moment.</li>
             )}
           </ul>
+        </div>
+      )}
+
+      {tab === "pellicule" && (
+        <div className="admin__pellicule">
+          <p className="admin__muted">
+            Ajoutez les photos de votre fiche Google (téléchargées depuis Maps /
+            Google Business). Elles apparaissent dans la catégorie Pellicule du
+            site.
+          </p>
+          <label className="pellicule-upload">
+            <span>
+              {uploadingPellicule
+                ? "Envoi en cours…"
+                : "Ajouter des photos (JPG, PNG…)"}
+            </span>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              disabled={uploadingPellicule}
+              onChange={(e) => {
+                void handlePelliculeUpload(e.target.files);
+                e.target.value = "";
+              }}
+            />
+          </label>
+          {loading && <p className="admin__muted">Chargement…</p>}
+          <ul className="pellicule-admin-grid">
+            {pellicule.map((photo) => (
+              <li key={photo.id}>
+                <img src={photo.src} alt={photo.alt} />
+                <button
+                  type="button"
+                  className="btn danger"
+                  onClick={() => void removePelliculePhoto(photo.id)}
+                >
+                  Supprimer
+                </button>
+              </li>
+            ))}
+          </ul>
+          {!loading && pellicule.length === 0 && (
+            <p className="admin__muted">Aucune photo pour le moment.</p>
+          )}
         </div>
       )}
 

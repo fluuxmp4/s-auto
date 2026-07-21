@@ -105,6 +105,16 @@ function ensureAvis(db) {
 
 fs.mkdirSync(DATA_DIR, { recursive: true });
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+const PELLICULE_DIR = path.join(UPLOAD_DIR, "pellicule");
+fs.mkdirSync(PELLICULE_DIR, { recursive: true });
+
+function ensurePellicule(db) {
+  if (!Array.isArray(db.pellicule)) {
+    db.pellicule = [];
+    writeDb(db);
+  }
+  return db.pellicule;
+}
 
 function readDb() {
   if (!fs.existsSync(DB_PATH)) {
@@ -115,6 +125,7 @@ function readDb() {
       mode: DEFAULT_MODE,
       devis: [],
       avis: DEFAULT_AVIS.map((a) => ({ ...a })),
+      pellicule: [],
       manager: { username: MANAGER_USER, passwordHash },
     };
     fs.writeFileSync(DB_PATH, JSON.stringify(initial, null, 2), "utf8");
@@ -135,9 +146,26 @@ const storage = multer.diskStorage({
   },
 });
 
+const pelliculeStorage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, PELLICULE_DIR),
+  filename: (_req, file, cb) => {
+    const safe = file.originalname.replace(/[^\w.\-]+/g, "_");
+    cb(null, `${Date.now()}-${randomUUID().slice(0, 8)}-${safe}`);
+  },
+});
+
 const upload = multer({
   storage,
   limits: { fileSize: 6 * 1024 * 1024, files: 6 },
+  fileFilter: (_req, file, cb) => {
+    if (file.mimetype.startsWith("image/")) cb(null, true);
+    else cb(new Error("Seules les images sont acceptées"));
+  },
+});
+
+const uploadPellicule = multer({
+  storage: pelliculeStorage,
+  limits: { fileSize: 8 * 1024 * 1024, files: 12 },
   fileFilter: (_req, file, cb) => {
     if (file.mimetype.startsWith("image/")) cb(null, true);
     else cb(new Error("Seules les images sont acceptées"));
@@ -373,6 +401,52 @@ app.delete("/api/avis/:id", auth, (req, res) => {
     return res.status(404).json({ error: "Avis introuvable" });
   }
   writeDb(db);
+  res.json({ ok: true });
+});
+
+app.get("/api/pellicule", (_req, res) => {
+  const db = readDb();
+  res.json({ photos: ensurePellicule(db) });
+});
+
+app.post("/api/pellicule", auth, uploadPellicule.array("photos", 12), (req, res) => {
+  try {
+    const files = req.files || [];
+    if (!files.length) {
+      return res.status(400).json({ error: "Aucune image envoyée" });
+    }
+    const db = readDb();
+    ensurePellicule(db);
+    const created = files.map((f) => ({
+      id: randomUUID(),
+      src: `/uploads/pellicule/${f.filename}`,
+      alt: String(req.body?.alt || "Photo atelier S AUTO").trim() || "Photo atelier S AUTO",
+      createdAt: new Date().toISOString(),
+    }));
+    db.pellicule = [...created, ...(db.pellicule || [])];
+    writeDb(db);
+    res.status(201).json({ ok: true, photos: created, pellicule: db.pellicule });
+  } catch (err) {
+    res.status(400).json({ error: err.message || "Upload impossible" });
+  }
+});
+
+app.delete("/api/pellicule/:id", auth, (req, res) => {
+  const id = req.params.id;
+  const db = readDb();
+  ensurePellicule(db);
+  const target = db.pellicule.find((p) => p.id === id);
+  if (!target) return res.status(404).json({ error: "Photo introuvable" });
+  db.pellicule = db.pellicule.filter((p) => p.id !== id);
+  writeDb(db);
+  const file = path.join(PELLICULE_DIR, path.basename(target.src));
+  if (fs.existsSync(file)) {
+    try {
+      fs.unlinkSync(file);
+    } catch {
+      /* ignore */
+    }
+  }
   res.json({ ok: true });
 });
 

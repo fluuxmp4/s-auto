@@ -188,6 +188,38 @@ export function deleteAvis(id: string) {
   });
 }
 
+export type PelliculePhoto = {
+  id: string;
+  src: string;
+  alt: string;
+  createdAt: string;
+};
+
+export function fetchPellicule() {
+  return api<{ photos: PelliculePhoto[] }>("/api/pellicule");
+}
+
+export function uploadPellicule(files: File[]) {
+  const fd = new FormData();
+  files.forEach((f) => fd.append("photos", f));
+  return api<{
+    ok: boolean;
+    photos: PelliculePhoto[];
+    pellicule: PelliculePhoto[];
+  }>("/api/pellicule", {
+    method: "POST",
+    auth: true,
+    body: fd,
+  });
+}
+
+export function deletePellicule(id: string) {
+  return api<{ ok: boolean }>(`/api/pellicule/${id}`, {
+    method: "DELETE",
+    auth: true,
+  });
+}
+
 export async function submitDevis(input: {
   prenom: string;
   name: string;

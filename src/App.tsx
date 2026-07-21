@@ -12,11 +12,13 @@ import {
   applyTheme,
   fetchAvis,
   fetchHours,
+  fetchPellicule,
   fetchTheme,
   submitAvis,
   submitDevis,
   type AvisItem,
   type HourRow,
+  type PelliculePhoto,
 } from "./api";
 import "./App.css";
 
@@ -761,6 +763,8 @@ export default function App() {
     "idle" | "loading" | "sent" | "error"
   >("idle");
   const [avisError, setAvisError] = useState("");
+  const [pellicule, setPellicule] = useState<PelliculePhoto[]>([]);
+  const [lightbox, setLightbox] = useState<PelliculePhoto | null>(null);
   const pageRef = useReveal();
 
   const avisAverage = useMemo(() => {
@@ -812,6 +816,29 @@ export default function App() {
         /* garde les avis par défaut */
       });
   }, []);
+
+  useEffect(() => {
+    fetchPellicule()
+      .then((res) => {
+        if (res.photos?.length) setPellicule(res.photos);
+      })
+      .catch(() => {
+        /* galerie vide si API down */
+      });
+  }, []);
+
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightbox(null);
+    };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = menuOpen ? "hidden" : "";
+    };
+  }, [lightbox, menuOpen]);
 
   function closeMenu() {
     setMenuOpen(false);
@@ -1055,6 +1082,7 @@ export default function App() {
           <nav className="nav__links" aria-label="Navigation principale">
             <a href="#services">Services</a>
             <a href="#atelier">L’atelier</a>
+            <a href="#pellicule">Pellicule</a>
             <a href="#avis">Avis</a>
             <a href="#devis">Devis</a>
           </nav>
@@ -1083,6 +1111,9 @@ export default function App() {
           </a>
           <a href="#atelier" onClick={closeMenu}>
             L’atelier
+          </a>
+          <a href="#pellicule" onClick={closeMenu}>
+            Pellicule
           </a>
           <a href="#avis" onClick={closeMenu}>
             Avis
@@ -1202,6 +1233,52 @@ export default function App() {
                 </li>
               ))}
             </ol>
+          </div>
+        </section>
+
+        <section id="pellicule" className="section pellicule">
+          <div className="container">
+            <div className="section__head reveal">
+              <p className="section__label">Pellicule</p>
+              <h2 className="section__title">L’atelier en images</h2>
+              <p className="section__text">
+                Photos de l’atelier S AUTO — carrosserie, peinture et vitrage à
+                Saint-Genis-Laval.
+              </p>
+            </div>
+
+            {pellicule.length > 0 ? (
+              <div className="film-strip reveal" role="list">
+                {pellicule.map((photo) => (
+                  <button
+                    key={photo.id}
+                    type="button"
+                    className="film-strip__frame"
+                    role="listitem"
+                    onClick={() => setLightbox(photo)}
+                    aria-label={`Agrandir : ${photo.alt}`}
+                  >
+                    <img src={photo.src} alt={photo.alt} loading="lazy" />
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <p className="pellicule__empty reveal">
+                La galerie se remplit bientôt. En attendant, retrouvez nos photos
+                sur Google.
+              </p>
+            )}
+
+            <div className="pellicule__actions reveal">
+              <a
+                className="btn btn--outline"
+                href={MAPS_URL}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Voir sur Google
+              </a>
+            </div>
           </div>
         </section>
 
@@ -1581,6 +1658,30 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {lightbox && (
+        <div
+          className="lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label={lightbox.alt}
+          onClick={() => setLightbox(null)}
+        >
+          <button
+            type="button"
+            className="lightbox__close"
+            aria-label="Fermer"
+            onClick={() => setLightbox(null)}
+          >
+            ×
+          </button>
+          <img
+            src={lightbox.src}
+            alt={lightbox.alt}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </div>
   );
 }
