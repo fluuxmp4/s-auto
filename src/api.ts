@@ -158,6 +158,36 @@ export function deleteDevis(id: string) {
   });
 }
 
+export type AvisItem = {
+  id: string;
+  name: string;
+  message: string;
+  stars: number;
+  createdAt: string;
+};
+
+export function fetchAvis() {
+  return api<{ avis: AvisItem[] }>("/api/avis");
+}
+
+export function submitAvis(input: {
+  name: string;
+  message?: string;
+  stars: number;
+}) {
+  return api<{ ok: boolean; avis: AvisItem }>("/api/avis", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+export function deleteAvis(id: string) {
+  return api<{ ok: boolean }>(`/api/avis/${id}`, {
+    method: "DELETE",
+    auth: true,
+  });
+}
+
 export async function submitDevis(input: {
   prenom: string;
   name: string;

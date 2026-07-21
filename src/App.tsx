@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useMemo,
   useRef,
   useState,
   type ChangeEvent,
@@ -9,9 +10,12 @@ import {
 import { jsPDF } from "jspdf";
 import {
   applyTheme,
+  fetchAvis,
   fetchHours,
   fetchTheme,
+  submitAvis,
   submitDevis,
+  type AvisItem,
   type HourRow,
 } from "./api";
 import "./App.css";
@@ -656,23 +660,36 @@ const STEPS = [
   },
 ];
 
-const REVIEWS = [
+const DEFAULT_REVIEWS: AvisItem[] = [
   {
-    quote:
+    id: "seed-1",
+    name: "Client Google",
+    message:
       "Mon véhicule a été réparé rapidement et avec un résultat impeccable.",
-    author: "Client Google",
+    stars: 5,
+    createdAt: "2024-01-01T10:00:00.000Z",
   },
   {
-    quote:
+    id: "seed-2",
+    name: "Région lyonnaise",
+    message:
       "Accueil pro, devis clair et finition nickel. Je recommande pour la carrosserie et le pare-brise.",
-    author: "Région lyonnaise",
+    stars: 5,
+    createdAt: "2024-03-01T10:00:00.000Z",
   },
   {
-    quote:
+    id: "seed-3",
+    name: "Client satisfait",
+    message:
       "Prise en charge assurance sans stress, délais respectés. Atelier sérieux à Saint-Genis-Laval.",
-    author: "Client satisfait",
+    stars: 5,
+    createdAt: "2024-06-01T10:00:00.000Z",
   },
 ];
+
+function starsLabel(n: number) {
+  return "★".repeat(n) + "☆".repeat(Math.max(0, 5 - n));
+}
 
 const DEFAULT_HOURS: HourRow[] = [
   { day: "Lundi", time: "8h30 – 12h / 13h30 – 19h" },
@@ -734,7 +751,23 @@ export default function App() {
   const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
   const [photoError, setPhotoError] = useState("");
   const [hours, setHours] = useState<HourRow[]>(DEFAULT_HOURS);
+  const [reviews, setReviews] = useState<AvisItem[]>(DEFAULT_REVIEWS);
+  const [avisOpen, setAvisOpen] = useState(false);
+  const [avisName, setAvisName] = useState("");
+  const [avisMessage, setAvisMessage] = useState("");
+  const [avisStars, setAvisStars] = useState(0);
+  const [avisHover, setAvisHover] = useState(0);
+  const [avisStatus, setAvisStatus] = useState<
+    "idle" | "loading" | "sent" | "error"
+  >("idle");
+  const [avisError, setAvisError] = useState("");
   const pageRef = useReveal();
+
+  const avisAverage = useMemo(() => {
+    if (!reviews.length) return 5;
+    const sum = reviews.reduce((acc, r) => acc + (r.stars || 0), 0);
+    return Math.round((sum / reviews.length) * 10) / 10;
+  }, [reviews]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -770,8 +803,51 @@ export default function App() {
       });
   }, []);
 
+  useEffect(() => {
+    fetchAvis()
+      .then((res) => {
+        if (res.avis?.length) setReviews(res.avis);
+      })
+      .catch(() => {
+        /* garde les avis par défaut */
+      });
+  }, []);
+
   function closeMenu() {
     setMenuOpen(false);
+  }
+
+  async function handleAvisSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setAvisError("");
+    if (avisStars < 1 || avisStars > 5) {
+      setAvisError("Choisissez une note de 1 à 5 étoiles.");
+      return;
+    }
+    const name = avisName.trim();
+    if (name.length < 2) {
+      setAvisError("Indiquez votre nom.");
+      return;
+    }
+    setAvisStatus("loading");
+    try {
+      const res = await submitAvis({
+        name,
+        message: avisMessage.trim(),
+        stars: avisStars,
+      });
+      setReviews((prev) => [res.avis, ...prev]);
+      setAvisName("");
+      setAvisMessage("");
+      setAvisStars(0);
+      setAvisStatus("sent");
+      setAvisOpen(false);
+    } catch (err) {
+      setAvisStatus("error");
+      setAvisError(
+        err instanceof Error ? err.message : "Envoi impossible, réessayez.",
+      );
+    }
   }
 
   function clearPhotos() {
@@ -1137,20 +1213,128 @@ export default function App() {
             </div>
 
             <div className="avis__score reveal">
-              <strong>5,0</strong>
+              <strong>{avisAverage.toFixed(1).replace(".", ",")}</strong>
               <div>
                 <div className="avis__stars" aria-hidden="true">
-                  ★★★★★
+                  {starsLabel(Math.round(avisAverage))}
                 </div>
-                <span>Sur Google · Saint-Genis-Laval</span>
+                <span>
+                  {reviews.length} avis · Saint-Genis-Laval
+                </span>
               </div>
+              <button
+                type="button"
+                className="btn btn--dark avis__cta"
+                onClick={() => {
+                  setAvisOpen((v) => !v);
+                  setAvisStatus("idle");
+                  setAvisError("");
+                }}
+              >
+                {avisOpen ? "Fermer" : "Laisser un avis"}
+              </button>
             </div>
 
+            {avisOpen && (
+              <form
+                className="avis__form reveal is-visible"
+                onSubmit={(e) => void handleAvisSubmit(e)}
+              >
+                <h3>Votre avis</h3>
+                <p>Partagez votre expérience à l’atelier S AUTO.</p>
+
+                <div className="field">
+                  <span id="avis-stars-label">Note sur 5 *</span>
+                  <div
+                    className="star-picker"
+                    role="radiogroup"
+                    aria-labelledby="avis-stars-label"
+                  >
+                    {[1, 2, 3, 4, 5].map((n) => {
+                      const active = (avisHover || avisStars) >= n;
+                      return (
+                        <button
+                          key={n}
+                          type="button"
+                          role="radio"
+                          aria-checked={avisStars === n}
+                          aria-label={`${n} étoile${n > 1 ? "s" : ""}`}
+                          className={
+                            active ? "star-picker__btn is-on" : "star-picker__btn"
+                          }
+                          onMouseEnter={() => setAvisHover(n)}
+                          onMouseLeave={() => setAvisHover(0)}
+                          onClick={() => setAvisStars(n)}
+                        >
+                          ★
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="field">
+                  <label htmlFor="avis-name">Nom *</label>
+                  <input
+                    id="avis-name"
+                    name="avis-name"
+                    required
+                    minLength={2}
+                    maxLength={80}
+                    autoComplete="name"
+                    value={avisName}
+                    onChange={(e) => setAvisName(e.target.value)}
+                  />
+                </div>
+
+                <div className="field">
+                  <label htmlFor="avis-message">Message (optionnel)</label>
+                  <textarea
+                    id="avis-message"
+                    name="avis-message"
+                    maxLength={800}
+                    placeholder="Ce que vous avez apprécié…"
+                    value={avisMessage}
+                    onChange={(e) => setAvisMessage(e.target.value)}
+                  />
+                </div>
+
+                {avisError && (
+                  <p className="form-error" role="alert">
+                    {avisError}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  className="btn btn--primary"
+                  disabled={avisStatus === "loading"}
+                >
+                  {avisStatus === "loading" ? "Envoi…" : "Publier mon avis"}
+                </button>
+              </form>
+            )}
+
+            {avisStatus === "sent" && !avisOpen && (
+              <p className="form-success avis__thanks" role="status">
+                Merci pour votre avis !
+              </p>
+            )}
+
             <div className="avis__grid">
-              {REVIEWS.map((r) => (
-                <article key={r.quote} className="avis__item reveal">
-                  <blockquote>« {r.quote} »</blockquote>
-                  <cite>— {r.author}</cite>
+              {reviews.map((r) => (
+                <article key={r.id} className="avis__item reveal">
+                  <div className="avis__item-stars" aria-label={`${r.stars} sur 5`}>
+                    {starsLabel(r.stars)}
+                  </div>
+                  {r.message ? (
+                    <blockquote>« {r.message} »</blockquote>
+                  ) : (
+                    <blockquote className="avis__item-empty">
+                      Avis sans commentaire
+                    </blockquote>
+                  )}
+                  <cite>— {r.name}</cite>
                 </article>
               ))}
             </div>

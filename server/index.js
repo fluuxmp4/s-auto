@@ -63,9 +63,39 @@ function normalizeTheme(value) {
   return THEME_IDS.includes(id) ? id : DEFAULT_THEME;
 }
 
-function normalizeMode(value) {
-  const id = String(value || "").trim().toLowerCase();
-  return MODE_IDS.includes(id) ? id : DEFAULT_MODE;
+const DEFAULT_AVIS = [
+  {
+    id: "seed-1",
+    name: "Client Google",
+    message:
+      "Mon véhicule a été réparé rapidement et avec un résultat impeccable.",
+    stars: 5,
+    createdAt: "2024-01-01T10:00:00.000Z",
+  },
+  {
+    id: "seed-2",
+    name: "Région lyonnaise",
+    message:
+      "Accueil pro, devis clair et finition nickel. Je recommande pour la carrosserie et le pare-brise.",
+    stars: 5,
+    createdAt: "2024-03-01T10:00:00.000Z",
+  },
+  {
+    id: "seed-3",
+    name: "Client satisfait",
+    message:
+      "Prise en charge assurance sans stress, délais respectés. Atelier sérieux à Saint-Genis-Laval.",
+    stars: 5,
+    createdAt: "2024-06-01T10:00:00.000Z",
+  },
+];
+
+function ensureAvis(db) {
+  if (!Array.isArray(db.avis)) {
+    db.avis = DEFAULT_AVIS.map((a) => ({ ...a }));
+    writeDb(db);
+  }
+  return db.avis;
 }
 
 fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -79,6 +109,7 @@ function readDb() {
       theme: DEFAULT_THEME,
       mode: DEFAULT_MODE,
       devis: [],
+      avis: DEFAULT_AVIS.map((a) => ({ ...a })),
       manager: { username: MANAGER_USER, passwordHash },
     };
     fs.writeFileSync(DB_PATH, JSON.stringify(initial, null, 2), "utf8");
@@ -283,6 +314,58 @@ app.delete("/api/devis/:id", auth, (req, res) => {
       const file = path.join(UPLOAD_DIR, path.basename(p));
       if (fs.existsSync(file)) fs.unlinkSync(file);
     }
+  }
+  writeDb(db);
+  res.json({ ok: true });
+});
+
+app.get("/api/avis", (_req, res) => {
+  const db = readDb();
+  const avis = ensureAvis(db);
+  res.json({ avis });
+});
+
+app.post("/api/avis", (req, res) => {
+  const name = String(req.body?.name || "").trim();
+  const message = String(req.body?.message || "").trim();
+  const stars = Number(req.body?.stars);
+
+  if (!name || name.length < 2) {
+    return res.status(400).json({ error: "Indiquez votre nom" });
+  }
+  if (!Number.isInteger(stars) || stars < 1 || stars > 5) {
+    return res.status(400).json({ error: "Choisissez une note de 1 à 5 étoiles" });
+  }
+  if (message.length > 800) {
+    return res.status(400).json({ error: "Message trop long (800 caractères max)" });
+  }
+  if (name.length > 80) {
+    return res.status(400).json({ error: "Nom trop long" });
+  }
+
+  const entry = {
+    id: randomUUID(),
+    name,
+    message,
+    stars,
+    createdAt: new Date().toISOString(),
+  };
+
+  const db = readDb();
+  ensureAvis(db);
+  db.avis = [entry, ...(db.avis || [])];
+  writeDb(db);
+  res.status(201).json({ ok: true, avis: entry });
+});
+
+app.delete("/api/avis/:id", auth, (req, res) => {
+  const id = req.params.id;
+  const db = readDb();
+  ensureAvis(db);
+  const before = db.avis.length;
+  db.avis = db.avis.filter((a) => a.id !== id);
+  if (db.avis.length === before) {
+    return res.status(404).json({ error: "Avis introuvable" });
   }
   writeDb(db);
   res.json({ ok: true });

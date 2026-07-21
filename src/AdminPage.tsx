@@ -2,7 +2,9 @@ import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import {
   applyTheme,
+  deleteAvis,
   deleteDevis,
+  fetchAvis,
   fetchDevis,
   fetchHours,
   fetchTheme,
@@ -14,6 +16,7 @@ import {
   updateDevisStatus,
   THEME_OPTIONS,
   MODE_OPTIONS,
+  type AvisItem,
   type DevisItem,
   type DevisStatus,
   type HourRow,
@@ -28,6 +31,10 @@ const STATUS_LABEL: Record<DevisStatus, string> = {
   traite: "Traité",
   archive: "Archivé",
 };
+
+function starsLabel(n: number) {
+  return "★".repeat(n) + "☆".repeat(Math.max(0, 5 - n));
+}
 
 function formatDate(iso: string) {
   try {
@@ -47,8 +54,11 @@ export default function AdminPage() {
   const [loginError, setLoginError] = useState("");
   const [loggingIn, setLoggingIn] = useState(false);
 
-  const [tab, setTab] = useState<"devis" | "horaires" | "apparence">("devis");
+  const [tab, setTab] = useState<"devis" | "horaires" | "apparence" | "avis">(
+    "devis",
+  );
   const [devis, setDevis] = useState<DevisItem[]>([]);
+  const [avisList, setAvisList] = useState<AvisItem[]>([]);
   const [hours, setHours] = useState<HourRow[]>([]);
   const [theme, setTheme] = useState<ThemeId>("classique");
   const [mode, setMode] = useState<ModeId>("clair");
@@ -75,16 +85,18 @@ export default function AdminPage() {
     setLoading(true);
     setError("");
     try {
-      const [d, h, t] = await Promise.all([
+      const [d, h, t, a] = await Promise.all([
         fetchDevis(),
         fetchHours(),
         fetchTheme(),
+        fetchAvis(),
       ]);
       setDevis(d.devis);
       setHours(h.hours);
       setTheme(t.theme);
       setMode(t.mode || "clair");
       applyTheme(t.theme, t.mode || "clair");
+      setAvisList(a.avis || []);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Chargement impossible");
       if (String(err).includes("Session") || String(err).includes("autoris")) {
@@ -176,6 +188,17 @@ export default function AdminPage() {
     }
   }
 
+  async function removeAvis(id: string) {
+    if (!confirm("Supprimer cet avis définitivement ?")) return;
+    try {
+      await deleteAvis(id);
+      setAvisList((prev) => prev.filter((a) => a.id !== id));
+      setMessage("Avis supprimé");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Suppression impossible");
+    }
+  }
+
   if (!token) {
     return (
       <div className="admin-login">
@@ -244,6 +267,13 @@ export default function AdminPage() {
           onClick={() => setTab("devis")}
         >
           Devis ({counts.nouveau} nouveaux)
+        </button>
+        <button
+          type="button"
+          className={tab === "avis" ? "is-active" : ""}
+          onClick={() => setTab("avis")}
+        >
+          Avis ({avisList.length})
         </button>
         <button
           type="button"
@@ -432,6 +462,39 @@ export default function AdminPage() {
               )}
             </div>
           </div>
+        </div>
+      )}
+
+      {tab === "avis" && (
+        <div className="admin__avis">
+          <p className="admin__muted">
+            Avis publiés sur le site. Vous pouvez supprimer un avis abusif.
+          </p>
+          {loading && <p className="admin__muted">Chargement…</p>}
+          <ul className="avis-admin-list">
+            {avisList.map((a) => (
+              <li key={a.id} className="avis-admin-card">
+                <div className="avis-admin-card__top">
+                  <strong>{a.name}</strong>
+                  <span className="avis-admin-stars">{starsLabel(a.stars)}</span>
+                </div>
+                <p>{a.message || "— Sans message —"}</p>
+                <div className="avis-admin-card__bottom">
+                  <time>{formatDate(a.createdAt)}</time>
+                  <button
+                    type="button"
+                    className="btn danger"
+                    onClick={() => void removeAvis(a.id)}
+                  >
+                    Supprimer
+                  </button>
+                </div>
+              </li>
+            ))}
+            {!loading && avisList.length === 0 && (
+              <li className="admin__muted">Aucun avis pour le moment.</li>
+            )}
+          </ul>
         </div>
       )}
 

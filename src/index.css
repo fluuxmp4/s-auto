@@ -706,6 +706,72 @@ ul {
   margin-bottom: 2.5rem;
 }
 
+.avis__cta {
+  margin-left: auto;
+}
+
+.avis__form {
+  display: grid;
+  gap: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  margin-bottom: 2.5rem;
+  max-width: 520px;
+}
+
+.avis__form h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.avis__form > p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 300;
+  margin-top: -0.35rem;
+}
+
+.star-picker {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.star-picker__btn {
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--border);
+  padding: 0.15rem;
+  transition: color 0.15s, transform 0.15s;
+}
+
+.star-picker__btn.is-on {
+  color: var(--accent);
+}
+
+.star-picker__btn:hover {
+  transform: scale(1.08);
+}
+
+.avis__thanks {
+  margin-bottom: 1.5rem;
+}
+
+.avis__item-stars {
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  font-size: 0.95rem;
+  margin-bottom: 0.55rem;
+}
+
+.avis__item-empty {
+  color: var(--muted);
+  font-style: italic;
+  font-weight: 300;
+}
+
 .avis__score strong {
   font-family: var(--font-display);
   font-size: clamp(3rem, 8vw, 4.5rem);
