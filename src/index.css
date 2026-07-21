@@ -661,6 +661,7 @@ ul {
 }
 
 .contact__form {
+  scroll-margin-top: calc(var(--nav-h) + 1rem);
   display: grid;
   gap: 1rem;
   background: var(--paper);

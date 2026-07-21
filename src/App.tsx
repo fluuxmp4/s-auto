@@ -964,6 +964,7 @@ export default function App() {
             <a href="#services">Services</a>
             <a href="#atelier">L’atelier</a>
             <a href="#avis">Avis</a>
+            <a href="#devis">Devis</a>
             <a href="#contact">Contact</a>
           </nav>
 
@@ -994,6 +995,9 @@ export default function App() {
           </a>
           <a href="#avis" onClick={closeMenu}>
             Avis
+          </a>
+          <a href="#devis" onClick={closeMenu}>
+            Devis
           </a>
           <a href="#contact" onClick={closeMenu}>
             Contact
@@ -1032,7 +1036,7 @@ export default function App() {
               <a className="btn btn--primary" href={`tel:${PHONE_TEL}`}>
                 Appeler le {PHONE}
               </a>
-              <a className="btn btn--ghost" href="#contact">
+              <a className="btn btn--ghost" href="#devis">
                 Demander un devis
               </a>
             </div>
@@ -1196,7 +1200,11 @@ export default function App() {
                 </div>
               </div>
 
-              <form className="contact__form reveal" onSubmit={handleSubmit}>
+              <form
+                id="devis"
+                className="contact__form reveal"
+                onSubmit={handleSubmit}
+              >
                 <h3>Demande de devis</h3>
                 <p>
                   Décrivez le sinistre et ajoutez des photos : la demande arrive
