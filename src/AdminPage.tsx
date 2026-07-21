@@ -478,8 +478,9 @@ export default function AdminPage() {
       {tab === "apparence" && (
         <div className="admin__theme">
           <p className="admin__muted">
-            Choisissez le mode (clair / sombre) et une palette. L’aperçu est
-            immédiat ; cliquez sur Enregistrer pour le site public.
+            Choisissez le mode (clair / sombre) et une palette pour le site
+            public. Le panel gérant reste toujours en clair. Après
+            enregistrement, ouvrez « Voir le site » pour vérifier le rendu.
           </p>
 
           <h3 className="admin__theme-title">Mode</h3>
