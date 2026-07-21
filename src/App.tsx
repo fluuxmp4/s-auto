@@ -1005,8 +1005,8 @@ export default function App() {
         <section className="hero" aria-label="Accueil">
           <div className="hero__media">
             <img
-              src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=2400&q=80"
-              alt="Peinture automobile en cabine — atelier de carrosserie"
+              src="/hero.png"
+              alt="Véhicule en atelier — carrosserie et finition"
               width={2400}
               height={1600}
               fetchPriority="high"
