@@ -981,7 +981,6 @@ export default function App() {
             <a href="#atelier">L’atelier</a>
             <a href="#avis">Avis</a>
             <a href="#devis">Devis</a>
-            <a href="#contact">Contact</a>
           </nav>
 
           <button
@@ -1014,9 +1013,6 @@ export default function App() {
           </a>
           <a href="#devis" onClick={closeMenu}>
             Devis
-          </a>
-          <a href="#contact" onClick={closeMenu}>
-            Contact
           </a>
         </div>
       </header>
@@ -1161,10 +1157,10 @@ export default function App() {
           </div>
         </section>
 
-        <section id="contact" className="section contact">
+        <section id="devis" className="section contact">
           <div className="container">
             <div className="section__head reveal">
-              <p className="section__label">Contact</p>
+              <p className="section__label">Devis</p>
               <h2 className="section__title">Parlons de votre véhicule</h2>
               <p className="section__text">
                 Atelier situé zone d’activités Chapoly-Laval — parking accessible,
@@ -1217,7 +1213,6 @@ export default function App() {
               </div>
 
               <form
-                id="devis"
                 className="contact__form reveal"
                 onSubmit={handleSubmit}
               >
