@@ -337,7 +337,7 @@ ul {
 
 .btn--primary {
   background: var(--brand);
-  color: var(--white);
+  color: #fff;
 }
 
 .btn--primary:hover {
@@ -346,22 +346,23 @@ ul {
 
 .btn--ghost {
   background: transparent;
-  color: var(--white);
+  color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.45);
 }
 
 .btn--ghost:hover {
-  border-color: var(--white);
+  border-color: #fff;
   background: rgba(255, 255, 255, 0.08);
 }
 
 .btn--dark {
   background: var(--ink);
-  color: var(--white);
+  color: var(--paper);
 }
 
 .btn--dark:hover {
   background: var(--brand);
+  color: #fff;
 }
 
 .btn--outline {
@@ -371,7 +372,7 @@ ul {
 
 .btn--outline:hover {
   background: var(--ink);
-  color: var(--white);
+  color: var(--paper);
 }
 
 /* —— Sections —— */
