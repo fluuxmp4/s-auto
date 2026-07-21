@@ -501,7 +501,7 @@ export default function AdminPage() {
       {tab === "horaires" && (
         <form className="admin__hours" onSubmit={handleSaveHours}>
           <p className="admin__muted">
-            Ces horaires s’affichent automatiquement sur la page Contact du
+            Ces horaires s’affichent automatiquement sur la page Devis du
             site.
           </p>
           {hours.map((h, i) => (

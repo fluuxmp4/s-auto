@@ -63,6 +63,11 @@ function normalizeTheme(value) {
   return THEME_IDS.includes(id) ? id : DEFAULT_THEME;
 }
 
+function normalizeMode(value) {
+  const id = String(value || "").trim().toLowerCase();
+  return MODE_IDS.includes(id) ? id : DEFAULT_MODE;
+}
+
 const DEFAULT_AVIS = [
   {
     id: "seed-1",
