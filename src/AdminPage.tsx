@@ -40,6 +40,35 @@ function starsLabel(n: number) {
   return "★".repeat(n) + "☆".repeat(Math.max(0, 5 - n));
 }
 
+async function compressImageFile(
+  file: File,
+  maxSide = 1400,
+  quality = 0.82,
+): Promise<File> {
+  if (!file.type.startsWith("image/")) return file;
+  try {
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
+    const w = Math.max(1, Math.round(bitmap.width * scale));
+    const h = Math.max(1, Math.round(bitmap.height * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return file;
+    ctx.drawImage(bitmap, 0, 0, w, h);
+    bitmap.close();
+    const blob: Blob | null = await new Promise((resolve) =>
+      canvas.toBlob((b) => resolve(b), "image/jpeg", quality),
+    );
+    if (!blob) return file;
+    const name = file.name.replace(/\.\w+$/, "") + ".jpg";
+    return new File([blob], name, { type: "image/jpeg" });
+  } catch {
+    return file;
+  }
+}
+
 function formatDate(iso: string) {
   try {
     return new Date(iso).toLocaleString("fr-FR", {
@@ -213,7 +242,11 @@ export default function AdminPage() {
     setError("");
     setUploadingPellicule(true);
     try {
-      const res = await uploadPellicule(Array.from(files));
+      const compressed: File[] = [];
+      for (const file of Array.from(files)) {
+        compressed.push(await compressImageFile(file, 1400, 0.82));
+      }
+      const res = await uploadPellicule(compressed);
       setPellicule(res.pellicule);
       setMessage(`${res.photos.length} photo(s) ajoutée(s) à la pellicule`);
     } catch (err) {
@@ -543,9 +576,9 @@ export default function AdminPage() {
       {tab === "pellicule" && (
         <div className="admin__pellicule">
           <p className="admin__muted">
-            Ajoutez les photos de votre fiche Google (téléchargées depuis Maps /
-            Google Business). Elles apparaissent dans la catégorie Pellicule du
-            site.
+            Ajoutez les photos (Google / atelier). Elles s’affichent dans
+            Pellicule sur le site. Re-uploadez-les si une ancienne photo ne
+            s’affiche plus après un redéploiement Render.
           </p>
           <label className="pellicule-upload">
             <span>

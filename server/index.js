@@ -117,8 +117,31 @@ function ensurePellicule(db) {
   if (!Array.isArray(db.pellicule)) {
     db.pellicule = [];
     writeDb(db);
+    return db.pellicule;
+  }
+  const cleaned = db.pellicule.filter((p) => {
+    if (!p || !p.id) return false;
+    if (p.data) return true;
+    if (p.src && String(p.src).startsWith("/uploads/")) {
+      const file = path.join(UPLOAD_DIR, String(p.src).replace(/^\/uploads\//, ""));
+      return fs.existsSync(file);
+    }
+    return Boolean(p.src);
+  });
+  if (cleaned.length !== db.pellicule.length) {
+    db.pellicule = cleaned;
+    writeDb(db);
   }
   return db.pellicule;
+}
+
+function publicPellicule(db) {
+  return ensurePellicule(db).map((p) => ({
+    id: p.id,
+    alt: p.alt || "Photo atelier S AUTO",
+    createdAt: p.createdAt,
+    src: p.data ? `/api/pellicule/${p.id}/image` : p.src,
+  }));
 }
 
 function readDb() {
@@ -413,7 +436,30 @@ app.delete("/api/avis/:id", auth, (req, res) => {
 
 app.get("/api/pellicule", (_req, res) => {
   const db = readDb();
-  res.json({ photos: ensurePellicule(db) });
+  res.json({ photos: publicPellicule(db) });
+});
+
+app.get("/api/pellicule/:id/image", (req, res) => {
+  const db = readDb();
+  ensurePellicule(db);
+  const photo = (db.pellicule || []).find((p) => p.id === req.params.id);
+  if (!photo) return res.status(404).json({ error: "Photo introuvable" });
+
+  if (photo.data) {
+    const buf = Buffer.from(photo.data, "base64");
+    res.setHeader("Content-Type", photo.mime || "image/jpeg");
+    res.setHeader("Cache-Control", "public, max-age=86400");
+    return res.send(buf);
+  }
+
+  if (photo.src && String(photo.src).startsWith("/uploads/")) {
+    const file = path.join(
+      UPLOAD_DIR,
+      String(photo.src).replace(/^\/uploads\//, ""),
+    );
+    if (fs.existsSync(file)) return res.sendFile(file);
+  }
+  return res.status(404).json({ error: "Fichier image manquant" });
 });
 
 app.post("/api/pellicule", auth, uploadPellicule.array("photos", 12), (req, res) => {
@@ -424,15 +470,46 @@ app.post("/api/pellicule", auth, uploadPellicule.array("photos", 12), (req, res)
     }
     const db = readDb();
     ensurePellicule(db);
-    const created = files.map((f) => ({
-      id: randomUUID(),
-      src: `/uploads/pellicule/${f.filename}`,
-      alt: String(req.body?.alt || "Photo atelier S AUTO").trim() || "Photo atelier S AUTO",
-      createdAt: new Date().toISOString(),
-    }));
+    const created = [];
+
+    for (const f of files) {
+      const id = randomUUID();
+      const buf = fs.readFileSync(f.path);
+      if (buf.length > 2.5 * 1024 * 1024) {
+        try {
+          fs.unlinkSync(f.path);
+        } catch {
+          /* ignore */
+        }
+        return res.status(400).json({
+          error: "Image trop lourde (max 2,5 Mo). Compressez-la puis réessayez.",
+        });
+      }
+      const entry = {
+        id,
+        alt:
+          String(req.body?.alt || "Photo atelier S AUTO").trim() ||
+          "Photo atelier S AUTO",
+        createdAt: new Date().toISOString(),
+        mime: f.mimetype || "image/jpeg",
+        data: buf.toString("base64"),
+        src: `/api/pellicule/${id}/image`,
+      };
+      created.push(entry);
+      try {
+        fs.unlinkSync(f.path);
+      } catch {
+        /* ignore */
+      }
+    }
+
     db.pellicule = [...created, ...(db.pellicule || [])];
     writeDb(db);
-    res.status(201).json({ ok: true, photos: created, pellicule: db.pellicule });
+    res.status(201).json({
+      ok: true,
+      photos: created.map(({ data, ...rest }) => rest),
+      pellicule: publicPellicule(db),
+    });
   } catch (err) {
     res.status(400).json({ error: err.message || "Upload impossible" });
   }
@@ -446,12 +523,17 @@ app.delete("/api/pellicule/:id", auth, (req, res) => {
   if (!target) return res.status(404).json({ error: "Photo introuvable" });
   db.pellicule = db.pellicule.filter((p) => p.id !== id);
   writeDb(db);
-  const file = path.join(PELLICULE_DIR, path.basename(target.src));
-  if (fs.existsSync(file)) {
-    try {
-      fs.unlinkSync(file);
-    } catch {
-      /* ignore */
+  if (target.src && String(target.src).startsWith("/uploads/")) {
+    const file = path.join(
+      UPLOAD_DIR,
+      String(target.src).replace(/^\/uploads\//, ""),
+    );
+    if (fs.existsSync(file)) {
+      try {
+        fs.unlinkSync(file);
+      } catch {
+        /* ignore */
+      }
     }
   }
   res.json({ ok: true });

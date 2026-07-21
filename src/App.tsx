@@ -1224,7 +1224,7 @@ export default function App() {
             </div>
 
             {pellicule.length > 0 ? (
-              <div className="film-strip reveal" role="list">
+              <div className="film-strip" role="list">
                 {pellicule.map((photo) => (
                   <button
                     key={photo.id}
