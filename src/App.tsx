@@ -763,10 +763,10 @@ export default function App() {
   useEffect(() => {
     fetchTheme()
       .then((res) => {
-        if (res.theme) applyTheme(res.theme);
+        applyTheme(res.theme || "classique", res.mode || "clair");
       })
       .catch(() => {
-        applyTheme("classique");
+        applyTheme("classique", "clair");
       });
   }, []);
 

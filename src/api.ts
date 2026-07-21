@@ -63,6 +63,7 @@ export function saveHours(hours: HourRow[]) {
 }
 
 export type ThemeId = "classique" | "atelier" | "prestige";
+export type ModeId = "clair" | "sombre";
 
 export const THEME_OPTIONS: {
   id: ThemeId;
@@ -90,20 +91,45 @@ export const THEME_OPTIONS: {
   },
 ];
 
+export const MODE_OPTIONS: {
+  id: ModeId;
+  label: string;
+  description: string;
+}[] = [
+  {
+    id: "clair",
+    label: "Clair",
+    description: "Fond clair, texte foncé — lecture de jour.",
+  },
+  {
+    id: "sombre",
+    label: "Sombre",
+    description: "Fond sombre, texte clair — rendu nocturne.",
+  },
+];
+
 export function fetchTheme() {
-  return api<{ theme: ThemeId; themes: ThemeId[] }>("/api/theme");
+  return api<{
+    theme: ThemeId;
+    mode: ModeId;
+    themes: ThemeId[];
+    modes: ModeId[];
+  }>("/api/theme");
 }
 
-export function saveTheme(theme: ThemeId) {
-  return api<{ theme: ThemeId }>("/api/theme", {
+export function saveTheme(theme: ThemeId, mode: ModeId) {
+  return api<{ theme: ThemeId; mode: ModeId }>("/api/theme", {
     method: "PUT",
     auth: true,
-    body: JSON.stringify({ theme }),
+    body: JSON.stringify({ theme, mode }),
   });
 }
 
-export function applyTheme(theme: ThemeId) {
+export function applyTheme(theme: ThemeId, mode: ModeId = "clair") {
   document.documentElement.setAttribute("data-theme", theme);
+  document.documentElement.setAttribute("data-mode", mode);
+  document.documentElement.style.colorScheme =
+    mode === "sombre" ? "dark" : "light";
 }
 
 export function login(username: string, password: string) {

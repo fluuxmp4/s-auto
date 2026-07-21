@@ -45,6 +45,35 @@
   --glow: rgba(184, 92, 56, 0.16);
 }
 
+/* Surfaces pour mode sombre (conserve brand/accent de la palette) */
+[data-mode="sombre"] {
+  --ink: #e8eef8;
+  --ink-soft: #b8c4d8;
+  --steel: #8a9bb0;
+  --paper: #0b1018;
+  --mist: #1c2433;
+  --white: #151d2c;
+  --glow: color-mix(in srgb, var(--brand) 28%, transparent);
+}
+
+[data-mode="sombre"][data-theme="atelier"] {
+  --ink: #f2ece6;
+  --ink-soft: #cfc4b8;
+  --steel: #9a9086;
+  --paper: #12100e;
+  --mist: #24201c;
+  --white: #1c1916;
+}
+
+[data-mode="sombre"][data-theme="prestige"] {
+  --ink: #e6f2ee;
+  --ink-soft: #b5cbc3;
+  --steel: #879e96;
+  --paper: #0a1210;
+  --mist: #172421;
+  --white: #13201c;
+}
+
 *,
 *::before,
 *::after {

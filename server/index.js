@@ -55,10 +55,17 @@ const DEFAULT_HOURS = [
 
 const THEME_IDS = ["classique", "atelier", "prestige"];
 const DEFAULT_THEME = "classique";
+const MODE_IDS = ["clair", "sombre"];
+const DEFAULT_MODE = "clair";
 
 function normalizeTheme(value) {
   const id = String(value || "").trim().toLowerCase();
   return THEME_IDS.includes(id) ? id : DEFAULT_THEME;
+}
+
+function normalizeMode(value) {
+  const id = String(value || "").trim().toLowerCase();
+  return MODE_IDS.includes(id) ? id : DEFAULT_MODE;
 }
 
 fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -70,6 +77,7 @@ function readDb() {
     const initial = {
       hours: DEFAULT_HOURS,
       theme: DEFAULT_THEME,
+      mode: DEFAULT_MODE,
       devis: [],
       manager: { username: MANAGER_USER, passwordHash },
     };
@@ -143,23 +151,40 @@ app.put("/api/hours", auth, (req, res) => {
 
 app.get("/api/theme", (_req, res) => {
   const db = readDb();
-  res.json({ theme: normalizeTheme(db.theme), themes: THEME_IDS });
+  res.json({
+    theme: normalizeTheme(db.theme),
+    mode: normalizeMode(db.mode),
+    themes: THEME_IDS,
+    modes: MODE_IDS,
+  });
 });
 
 app.put("/api/theme", auth, (req, res) => {
-  const raw = String(req.body?.theme || "")
+  const rawTheme = String(req.body?.theme || "")
     .trim()
     .toLowerCase();
-  if (!THEME_IDS.includes(raw)) {
+  const rawMode = String(req.body?.mode || "")
+    .trim()
+    .toLowerCase();
+
+  if (!THEME_IDS.includes(rawTheme)) {
     return res.status(400).json({
       error: `Thème invalide. Choisir : ${THEME_IDS.join(", ")}`,
     });
   }
-  const theme = normalizeTheme(raw);
+  if (!MODE_IDS.includes(rawMode)) {
+    return res.status(400).json({
+      error: `Mode invalide. Choisir : ${MODE_IDS.join(", ")}`,
+    });
+  }
+
+  const theme = normalizeTheme(rawTheme);
+  const mode = normalizeMode(rawMode);
   const db = readDb();
   db.theme = theme;
+  db.mode = mode;
   writeDb(db);
-  res.json({ theme: db.theme });
+  res.json({ theme: db.theme, mode: db.mode });
 });
 
 app.post("/api/auth/login", (req, res) => {

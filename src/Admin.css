@@ -412,6 +412,54 @@
   max-width: 900px;
 }
 
+.admin__theme-title {
+  margin: 1.25rem 0 0.65rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #5c677a;
+}
+
+.mode-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 0.5rem;
+}
+
+.mode-card {
+  display: grid;
+  gap: 0.35rem;
+  text-align: left;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 2px solid #d8e0ec;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.mode-card:hover {
+  border-color: #9eb0c8;
+}
+
+.mode-card.is-active {
+  border-color: #0066c8;
+  box-shadow: 0 0 0 3px rgba(0, 102, 200, 0.15);
+}
+
+.mode-card strong {
+  font-family: var(--font-display, Syne, sans-serif);
+  font-size: 1.05rem;
+}
+
+.mode-card span {
+  font-size: 0.82rem;
+  color: #5c677a;
+  line-height: 1.4;
+}
+
 .theme-grid {
   display: grid;
   gap: 0.85rem;

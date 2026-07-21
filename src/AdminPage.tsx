@@ -13,10 +13,12 @@ import {
   setToken,
   updateDevisStatus,
   THEME_OPTIONS,
+  MODE_OPTIONS,
   type DevisItem,
   type DevisStatus,
   type HourRow,
   type ThemeId,
+  type ModeId,
 } from "./api";
 import "./Admin.css";
 
@@ -49,6 +51,7 @@ export default function AdminPage() {
   const [devis, setDevis] = useState<DevisItem[]>([]);
   const [hours, setHours] = useState<HourRow[]>([]);
   const [theme, setTheme] = useState<ThemeId>("classique");
+  const [mode, setMode] = useState<ModeId>("clair");
   const [filter, setFilter] = useState<"tous" | DevisStatus>("tous");
   const [selected, setSelected] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -80,7 +83,8 @@ export default function AdminPage() {
       setDevis(d.devis);
       setHours(h.hours);
       setTheme(t.theme);
-      applyTheme(t.theme);
+      setMode(t.mode || "clair");
+      applyTheme(t.theme, t.mode || "clair");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Chargement impossible");
       if (String(err).includes("Session") || String(err).includes("autoris")) {
@@ -160,10 +164,11 @@ export default function AdminPage() {
     setError("");
     setSavingTheme(true);
     try {
-      const res = await saveTheme(theme);
+      const res = await saveTheme(theme, mode);
       setTheme(res.theme);
-      applyTheme(res.theme);
-      setMessage("Palette enregistrée — visible sur le site public");
+      setMode(res.mode);
+      applyTheme(res.theme, res.mode);
+      setMessage("Apparence enregistrée — visible sur le site public");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Enregistrement impossible");
     } finally {
@@ -473,9 +478,33 @@ export default function AdminPage() {
       {tab === "apparence" && (
         <div className="admin__theme">
           <p className="admin__muted">
-            Choisissez une palette de couleurs pour le site public. Le
-            changement est immédiat après enregistrement.
+            Choisissez le mode (clair / sombre) et une palette. L’aperçu est
+            immédiat ; cliquez sur Enregistrer pour le site public.
           </p>
+
+          <h3 className="admin__theme-title">Mode</h3>
+          <div className="mode-grid" role="radiogroup" aria-label="Mode">
+            {MODE_OPTIONS.map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                role="radio"
+                aria-checked={mode === opt.id}
+                className={
+                  mode === opt.id ? "mode-card is-active" : "mode-card"
+                }
+                onClick={() => {
+                  setMode(opt.id);
+                  applyTheme(theme, opt.id);
+                }}
+              >
+                <strong>{opt.label}</strong>
+                <span>{opt.description}</span>
+              </button>
+            ))}
+          </div>
+
+          <h3 className="admin__theme-title">Palette</h3>
           <div className="theme-grid" role="radiogroup" aria-label="Palettes">
             {THEME_OPTIONS.map((opt) => (
               <button
@@ -488,7 +517,7 @@ export default function AdminPage() {
                 }
                 onClick={() => {
                   setTheme(opt.id);
-                  applyTheme(opt.id);
+                  applyTheme(opt.id, mode);
                 }}
               >
                 <span className="theme-card__swatches" aria-hidden>
@@ -511,7 +540,7 @@ export default function AdminPage() {
             disabled={savingTheme}
             onClick={() => void handleSaveTheme()}
           >
-            {savingTheme ? "Enregistrement…" : "Enregistrer la palette"}
+            {savingTheme ? "Enregistrement…" : "Enregistrer l’apparence"}
           </button>
         </div>
       )}
