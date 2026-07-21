@@ -1,0 +1,408 @@
+.admin-login {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 0%, rgba(0, 102, 200, 0.14), transparent),
+    #eef2f7;
+}
+
+.admin-login__card {
+  width: min(400px, 100%);
+  background: #fff;
+  padding: 1.75rem;
+  border-radius: 14px;
+  display: grid;
+  gap: 0.85rem;
+  box-shadow: 0 16px 40px rgba(12, 18, 34, 0.1);
+}
+
+.admin-login__brand {
+  font-family: var(--font-display, Syne, sans-serif);
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+.admin-login__brand span {
+  color: #0066c8;
+}
+
+.admin-login h1 {
+  font-family: var(--font-display, Syne, sans-serif);
+  font-size: 1.35rem;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.admin-login__hint,
+.admin__muted,
+.admin__sub {
+  color: #5c677a;
+  font-size: 0.9rem;
+  font-weight: 300;
+}
+
+.admin-login label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.admin-login input,
+.admin__hours input,
+.devis-actions select {
+  font: inherit;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid #d8e0ec;
+  border-radius: 8px;
+}
+
+.admin-login button,
+.admin__top-actions button,
+.admin__filters button,
+.btn {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+}
+
+.admin-login button {
+  background: #0066c8;
+  color: #fff;
+}
+
+.admin-login__back {
+  text-align: center;
+  font-size: 0.88rem;
+  color: #5c677a;
+}
+
+.admin-alert {
+  background: rgba(212, 0, 26, 0.08);
+  border-left: 3px solid #d4001a;
+  color: #a80015;
+  padding: 0.75rem;
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+.admin-ok {
+  background: rgba(16, 140, 70, 0.1);
+  border-left: 3px solid #108c46;
+  color: #0a5c2e;
+  padding: 0.75rem 1rem;
+  margin: 0 1.25rem;
+  font-size: 0.9rem;
+}
+
+.admin {
+  min-height: 100svh;
+  background: #eef2f7;
+  color: #0c1222;
+}
+
+.admin__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  padding: 1.1rem 1.25rem;
+  background: #0a1a3a;
+  color: #fff;
+}
+
+.admin__brand {
+  font-family: var(--font-display, Syne, sans-serif);
+  font-weight: 800;
+  font-size: 1.2rem;
+  margin: 0;
+  letter-spacing: -0.03em;
+}
+
+.admin__brand span {
+  color: #7eb6ff;
+}
+
+.admin__sub {
+  margin: 0.2rem 0 0;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.admin__top-actions {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.admin__top-actions a {
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.admin__top-actions button {
+  background: #0066c8;
+  color: #fff;
+}
+
+.admin__tabs {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem 0;
+}
+
+.admin__tabs button {
+  background: #fff;
+  border: 1px solid #d8e0ec;
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.admin__tabs button.is-active {
+  background: #0066c8;
+  border-color: #0066c8;
+  color: #fff;
+}
+
+.admin__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+
+.admin__filters button {
+  background: #fff;
+  border: 1px solid #d8e0ec;
+  font-size: 0.8rem;
+  padding: 0.45rem 0.75rem;
+}
+
+.admin__filters button.is-active {
+  background: #0a1a3a;
+  color: #fff;
+  border-color: #0a1a3a;
+}
+
+.admin__filters .ghost {
+  margin-left: auto;
+  background: transparent;
+}
+
+.admin__devis,
+.admin__hours {
+  padding: 1rem 1.25rem 2rem;
+}
+
+.admin__split {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 900px) {
+  .admin__split {
+    grid-template-columns: 1fr 1.2fr;
+    align-items: start;
+  }
+}
+
+.devis-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.devis-row {
+  width: 100%;
+  text-align: left;
+  background: #fff;
+  border: 1px solid #d8e0ec;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  display: grid;
+  gap: 0.25rem;
+  cursor: pointer;
+}
+
+.devis-row.is-active {
+  border-color: #0066c8;
+  box-shadow: 0 0 0 2px rgba(0, 102, 200, 0.15);
+}
+
+.devis-row strong {
+  font-size: 1rem;
+}
+
+.devis-row span,
+.devis-row time {
+  font-size: 0.82rem;
+  color: #5c677a;
+}
+
+.badge {
+  display: inline-flex;
+  width: fit-content;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.badge--nouveau {
+  background: rgba(212, 0, 26, 0.12);
+  color: #d4001a;
+}
+
+.badge--en_cours {
+  background: rgba(0, 102, 200, 0.12);
+  color: #0066c8;
+}
+
+.badge--traite {
+  background: rgba(16, 140, 70, 0.12);
+  color: #0a5c2e;
+}
+
+.badge--archive {
+  background: #e8edf4;
+  color: #5c677a;
+}
+
+.devis-detail {
+  background: #fff;
+  border: 1px solid #d8e0ec;
+  border-radius: 12px;
+  padding: 1.15rem;
+  min-height: 280px;
+}
+
+.devis-detail__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: start;
+  margin-bottom: 1rem;
+}
+
+.devis-detail h2 {
+  font-family: var(--font-display, Syne, sans-serif);
+  margin: 0;
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+}
+
+.devis-detail h3 {
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0066c8;
+  margin: 1.1rem 0 0.45rem;
+}
+
+.devis-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 700px) {
+  .devis-meta {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.devis-meta dt {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #5c677a;
+}
+
+.devis-meta dd {
+  margin: 0.2rem 0 0;
+  font-weight: 600;
+}
+
+.devis-message {
+  white-space: pre-wrap;
+  background: #f4f7fb;
+  padding: 0.85rem;
+  border-radius: 8px;
+  margin: 0;
+}
+
+.devis-photos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 0.55rem;
+}
+
+.devis-photos img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+.devis-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: end;
+  margin-top: 1.25rem;
+}
+
+.devis-actions label {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.btn {
+  background: #0a1a3a;
+  color: #fff;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn.primary {
+  background: #0066c8;
+}
+
+.btn.danger {
+  background: #d4001a;
+}
+
+.hours-row {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.hours-row label {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.admin__hours .btn {
+  margin-top: 0.5rem;
+}
