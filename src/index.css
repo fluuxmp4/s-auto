@@ -759,6 +759,7 @@ ul {
 /* —— Contact —— */
 .contact {
   background: var(--white);
+  scroll-margin-top: calc(var(--nav-h) + 0.5rem);
 }
 
 .contact__layout {
