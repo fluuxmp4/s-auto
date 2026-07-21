@@ -1,17 +1,22 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import {
+  applyTheme,
   deleteDevis,
   fetchDevis,
+  fetchHours,
+  fetchTheme,
   getToken,
   login,
   saveHours,
+  saveTheme,
   setToken,
   updateDevisStatus,
-  fetchHours,
+  THEME_OPTIONS,
   type DevisItem,
   type DevisStatus,
   type HourRow,
+  type ThemeId,
 } from "./api";
 import "./Admin.css";
 
@@ -40,14 +45,16 @@ export default function AdminPage() {
   const [loginError, setLoginError] = useState("");
   const [loggingIn, setLoggingIn] = useState(false);
 
-  const [tab, setTab] = useState<"devis" | "horaires">("devis");
+  const [tab, setTab] = useState<"devis" | "horaires" | "apparence">("devis");
   const [devis, setDevis] = useState<DevisItem[]>([]);
   const [hours, setHours] = useState<HourRow[]>([]);
+  const [theme, setTheme] = useState<ThemeId>("classique");
   const [filter, setFilter] = useState<"tous" | DevisStatus>("tous");
   const [selected, setSelected] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [savingTheme, setSavingTheme] = useState(false);
 
   const filtered = useMemo(
     () =>
@@ -65,9 +72,15 @@ export default function AdminPage() {
     setLoading(true);
     setError("");
     try {
-      const [d, h] = await Promise.all([fetchDevis(), fetchHours()]);
+      const [d, h, t] = await Promise.all([
+        fetchDevis(),
+        fetchHours(),
+        fetchTheme(),
+      ]);
       setDevis(d.devis);
       setHours(h.hours);
+      setTheme(t.theme);
+      applyTheme(t.theme);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Chargement impossible");
       if (String(err).includes("Session") || String(err).includes("autoris")) {
@@ -142,6 +155,22 @@ export default function AdminPage() {
     }
   }
 
+  async function handleSaveTheme() {
+    setMessage("");
+    setError("");
+    setSavingTheme(true);
+    try {
+      const res = await saveTheme(theme);
+      setTheme(res.theme);
+      applyTheme(res.theme);
+      setMessage("Palette enregistrée — visible sur le site public");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Enregistrement impossible");
+    } finally {
+      setSavingTheme(false);
+    }
+  }
+
   if (!token) {
     return (
       <div className="admin-login">
@@ -151,7 +180,7 @@ export default function AdminPage() {
           </p>
           <h1>Espace gérant</h1>
           <p className="admin-login__hint">
-            Accès réservé à la gestion des devis et horaires.
+            Accès réservé à la gestion des devis, horaires et apparence.
           </p>
           {loginError && <p className="admin-alert">{loginError}</p>}
           <label>
@@ -217,6 +246,13 @@ export default function AdminPage() {
           onClick={() => setTab("horaires")}
         >
           Horaires
+        </button>
+        <button
+          type="button"
+          className={tab === "apparence" ? "is-active" : ""}
+          onClick={() => setTab("apparence")}
+        >
+          Apparence
         </button>
       </div>
 
@@ -432,6 +468,52 @@ export default function AdminPage() {
             Enregistrer les horaires
           </button>
         </form>
+      )}
+
+      {tab === "apparence" && (
+        <div className="admin__theme">
+          <p className="admin__muted">
+            Choisissez une palette de couleurs pour le site public. Le
+            changement est immédiat après enregistrement.
+          </p>
+          <div className="theme-grid" role="radiogroup" aria-label="Palettes">
+            {THEME_OPTIONS.map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                role="radio"
+                aria-checked={theme === opt.id}
+                className={
+                  theme === opt.id ? "theme-card is-active" : "theme-card"
+                }
+                onClick={() => {
+                  setTheme(opt.id);
+                  applyTheme(opt.id);
+                }}
+              >
+                <span className="theme-card__swatches" aria-hidden>
+                  {opt.swatches.map((color) => (
+                    <span
+                      key={color}
+                      style={{ background: color }}
+                      className="theme-card__swatch"
+                    />
+                  ))}
+                </span>
+                <strong>{opt.label}</strong>
+                <span>{opt.description}</span>
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            className="btn primary"
+            disabled={savingTheme}
+            onClick={() => void handleSaveTheme()}
+          >
+            {savingTheme ? "Enregistrement…" : "Enregistrer la palette"}
+          </button>
+        </div>
       )}
     </div>
   );

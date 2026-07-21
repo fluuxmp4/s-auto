@@ -53,6 +53,14 @@ const DEFAULT_HOURS = [
   { day: "Dimanche", time: "Fermé" },
 ];
 
+const THEME_IDS = ["classique", "atelier", "prestige"];
+const DEFAULT_THEME = "classique";
+
+function normalizeTheme(value) {
+  const id = String(value || "").trim().toLowerCase();
+  return THEME_IDS.includes(id) ? id : DEFAULT_THEME;
+}
+
 fs.mkdirSync(DATA_DIR, { recursive: true });
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
@@ -61,6 +69,7 @@ function readDb() {
     const passwordHash = bcrypt.hashSync(MANAGER_PASSWORD, 10);
     const initial = {
       hours: DEFAULT_HOURS,
+      theme: DEFAULT_THEME,
       devis: [],
       manager: { username: MANAGER_USER, passwordHash },
     };
@@ -130,6 +139,27 @@ app.put("/api/hours", auth, (req, res) => {
   db.hours = cleaned;
   writeDb(db);
   res.json({ hours: db.hours });
+});
+
+app.get("/api/theme", (_req, res) => {
+  const db = readDb();
+  res.json({ theme: normalizeTheme(db.theme), themes: THEME_IDS });
+});
+
+app.put("/api/theme", auth, (req, res) => {
+  const raw = String(req.body?.theme || "")
+    .trim()
+    .toLowerCase();
+  if (!THEME_IDS.includes(raw)) {
+    return res.status(400).json({
+      error: `Thème invalide. Choisir : ${THEME_IDS.join(", ")}`,
+    });
+  }
+  const theme = normalizeTheme(raw);
+  const db = readDb();
+  db.theme = theme;
+  writeDb(db);
+  res.json({ theme: db.theme });
 });
 
 app.post("/api/auth/login", (req, res) => {

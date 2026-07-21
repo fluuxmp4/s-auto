@@ -62,6 +62,50 @@ export function saveHours(hours: HourRow[]) {
   });
 }
 
+export type ThemeId = "classique" | "atelier" | "prestige";
+
+export const THEME_OPTIONS: {
+  id: ThemeId;
+  label: string;
+  description: string;
+  swatches: [string, string, string];
+}[] = [
+  {
+    id: "classique",
+    label: "Classique",
+    description: "Bleu atelier & rouge S AUTO — identité actuelle.",
+    swatches: ["#0066c8", "#d4001a", "#0a1a3a"],
+  },
+  {
+    id: "atelier",
+    label: "Atelier",
+    description: "Anthracite & ambre — ambiance garage / métal.",
+    swatches: ["#c45c26", "#1a1a1a", "#8b7355"],
+  },
+  {
+    id: "prestige",
+    label: "Prestige",
+    description: "Vert profond & cuivre — rendu plus haut de gamme.",
+    swatches: ["#0d5c4d", "#b85c38", "#0f1f1c"],
+  },
+];
+
+export function fetchTheme() {
+  return api<{ theme: ThemeId; themes: ThemeId[] }>("/api/theme");
+}
+
+export function saveTheme(theme: ThemeId) {
+  return api<{ theme: ThemeId }>("/api/theme", {
+    method: "PUT",
+    auth: true,
+    body: JSON.stringify({ theme }),
+  });
+}
+
+export function applyTheme(theme: ThemeId) {
+  document.documentElement.setAttribute("data-theme", theme);
+}
+
 export function login(username: string, password: string) {
   return api<{ token: string; username: string }>("/api/auth/login", {
     method: "POST",

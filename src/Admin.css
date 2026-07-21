@@ -406,3 +406,67 @@
 .admin__hours .btn {
   margin-top: 0.5rem;
 }
+
+.admin__theme {
+  padding: 1rem 1.25rem 2rem;
+  max-width: 900px;
+}
+
+.theme-grid {
+  display: grid;
+  gap: 0.85rem;
+  margin: 1rem 0 1.25rem;
+}
+
+@media (min-width: 720px) {
+  .theme-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.theme-card {
+  display: grid;
+  gap: 0.45rem;
+  text-align: left;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 2px solid #d8e0ec;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.theme-card:hover {
+  border-color: #9eb0c8;
+}
+
+.theme-card.is-active {
+  border-color: #0066c8;
+  box-shadow: 0 0 0 3px rgba(0, 102, 200, 0.15);
+}
+
+.theme-card strong {
+  font-family: var(--font-display, Syne, sans-serif);
+  font-size: 1.05rem;
+}
+
+.theme-card > span:last-child {
+  font-size: 0.82rem;
+  color: #5c677a;
+  line-height: 1.4;
+}
+
+.theme-card__swatches {
+  display: flex;
+  gap: 0.35rem;
+  margin-bottom: 0.25rem;
+}
+
+.theme-card__swatch {
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}

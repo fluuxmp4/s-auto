@@ -7,7 +7,13 @@ import {
   type RefObject,
 } from "react";
 import { jsPDF } from "jspdf";
-import { fetchHours, submitDevis, type HourRow } from "./api";
+import {
+  applyTheme,
+  fetchHours,
+  fetchTheme,
+  submitDevis,
+  type HourRow,
+} from "./api";
 import "./App.css";
 
 const PHONE = "09 88 08 18 53";
@@ -751,6 +757,16 @@ export default function App() {
       })
       .catch(() => {
         /* garde les horaires par défaut si l’API est down */
+      });
+  }, []);
+
+  useEffect(() => {
+    fetchTheme()
+      .then((res) => {
+        if (res.theme) applyTheme(res.theme);
+      })
+      .catch(() => {
+        applyTheme("classique");
       });
   }, []);
 
