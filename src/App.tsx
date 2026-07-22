@@ -1405,7 +1405,9 @@ export default function App() {
           <div className="container">
             <div className="section__head reveal">
               <p className="section__label">Déroulement</p>
-              <h2 className="section__title">De la prise de contact à la clé</h2>
+              <h2 className="section__title">
+                De la prise de contact à la remise des clés
+              </h2>
               <p className="section__text">
                 Un parcours simple, sans surprise — de la photo au véhicule
                 restitué.
