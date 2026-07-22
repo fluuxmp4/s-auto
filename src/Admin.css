@@ -118,7 +118,7 @@
 .admin-login button,
 .admin__top-actions button,
 .admin__filters button,
-.btn {
+.admin .btn {
   font: inherit;
   cursor: pointer;
   border: none;
@@ -596,9 +596,9 @@
 }
 
 /* ================================================================
-   Boutons
+   Boutons (scopés .admin pour ne pas fuir sur le site public)
 ================================================================ */
-.btn {
+.admin .btn {
   background: var(--a-navy);
   color: #fff;
   text-decoration: none;
@@ -608,26 +608,26 @@
   gap: 0.4rem;
 }
 
-.btn:hover {
+.admin .btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 8px 18px -8px rgba(10, 26, 58, 0.5);
 }
 
-.btn.primary {
+.admin .btn.primary {
   background: var(--a-blue);
 }
 
-.btn.primary:hover {
+.admin .btn.primary:hover {
   background: var(--a-blue-deep);
 }
 
-.btn.danger {
+.admin .btn.danger {
   background: transparent;
   color: var(--a-red);
   border: 1px solid rgba(212, 0, 26, 0.35);
 }
 
-.btn.danger:hover {
+.admin .btn.danger:hover {
   background: var(--a-red);
   color: #fff;
   border-color: var(--a-red);

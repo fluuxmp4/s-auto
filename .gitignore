@@ -31,3 +31,4 @@ dist-ssr
 uploads/
 server/data/
 server/uploads/
+chrome-out/

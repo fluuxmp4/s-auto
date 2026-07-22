@@ -1215,27 +1215,65 @@ export default function App() {
         </div>
 
         <div className="nav__drawer">
-          <a href="#services" onClick={closeMenu}>
-            Services
-          </a>
-          <a href="#atelier" onClick={closeMenu}>
-            L’atelier
-          </a>
-          <a href="#pellicule" onClick={closeMenu}>
-            Pellicule
-          </a>
-          <a href="#devis" onClick={closeMenu}>
-            Devis
-          </a>
-          <a href="#contact" onClick={closeMenu}>
-            Contact
-          </a>
-          <a href="#avis" onClick={closeMenu}>
-            Avis
-          </a>
-          <a href={`mailto:${CONTACT_EMAIL}`} onClick={closeMenu}>
-            {CONTACT_EMAIL}
-          </a>
+          <nav className="nav__drawer-links" aria-label="Menu mobile">
+            {(
+              [
+                ["#services", "Services"],
+                ["#atelier", "L’atelier"],
+                ["#pellicule", "Pellicule"],
+                ["#devis", "Devis"],
+                ["#contact", "Contact"],
+                ["#avis", "Avis"],
+              ] as const
+            ).map(([href, label], i) => (
+              <a key={href} href={href} onClick={closeMenu}>
+                <span className="nav__drawer-num">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                {label}
+                <span className="nav__drawer-arrow" aria-hidden="true">
+                  →
+                </span>
+              </a>
+            ))}
+          </nav>
+
+          <div className="nav__drawer-footer">
+            <a
+              className="btn btn--primary nav__drawer-cta"
+              href={`tel:${PHONE_TEL}`}
+              onClick={closeMenu}
+            >
+              <PhoneIcon />
+              Appeler le {PHONE}
+            </a>
+            <a
+              className="btn btn--outline nav__drawer-cta"
+              href={`mailto:${CONTACT_EMAIL}`}
+              onClick={closeMenu}
+            >
+              <MailIcon />
+              {CONTACT_EMAIL}
+            </a>
+            <div className="nav__drawer-social">
+              <a
+                href={TIKTOK_URL}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="TikTok — S AUTO"
+              >
+                <TikTokIcon />
+              </a>
+              <a
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Instagram — S AUTO"
+              >
+                <InstagramIcon />
+              </a>
+            </div>
+          </div>
         </div>
       </header>
 
