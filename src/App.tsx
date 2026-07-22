@@ -1186,6 +1186,7 @@ export default function App() {
             <a href="#atelier">L’atelier</a>
             <a href="#pellicule">Pellicule</a>
             <a href="#devis">Devis</a>
+            <a href="#contact">Contact</a>
             <a href="#avis">Avis</a>
           </nav>
 
@@ -1225,6 +1226,9 @@ export default function App() {
           </a>
           <a href="#devis" onClick={closeMenu}>
             Devis
+          </a>
+          <a href="#contact" onClick={closeMenu}>
+            Contact
           </a>
           <a href="#avis" onClick={closeMenu}>
             Avis
@@ -1476,49 +1480,6 @@ export default function App() {
             </div>
 
             <div className="contact__layout">
-              <div className="contact__details reveal">
-                <dl className="detail">
-                  <dt>Téléphone</dt>
-                  <dd>
-                    <a href={`tel:${PHONE_TEL}`}>{PHONE}</a>
-                  </dd>
-                </dl>
-                <dl className="detail">
-                  <dt>Adresse</dt>
-                  <dd>
-                    <a href={MAPS_URL} target="_blank" rel="noreferrer">
-                      {ADDRESS}
-                    </a>
-                  </dd>
-                </dl>
-                <dl className="detail">
-                  <dt>Horaires</dt>
-                  <dd>
-                    <ul className="hours">
-                      {hours.map((h) => (
-                        <li key={h.day}>
-                          <span>{h.day}</span>
-                          <strong>{h.time}</strong>
-                        </li>
-                      ))}
-                    </ul>
-                  </dd>
-                </dl>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
-                  <a className="btn btn--dark" href={`tel:${PHONE_TEL}`}>
-                    Appeler maintenant
-                  </a>
-                  <a
-                    className="btn btn--outline"
-                    href={MAPS_URL}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Itinéraire
-                  </a>
-                </div>
-              </div>
-
               <form
                 className="contact__form reveal"
                 onSubmit={handleSubmit}
@@ -1666,6 +1627,88 @@ export default function App() {
                     : "Envoyer la demande"}
                 </button>
               </form>
+            </div>
+          </div>
+        </section>
+
+        <section id="contact" className="section contact-info">
+          <div className="container">
+            <div className="section__head reveal">
+              <p className="section__label">Contact</p>
+              <h2 className="section__title">Nous contacter</h2>
+              <p className="section__text">
+                Téléphone, e-mail, horaires et réseaux sociaux — l’atelier vous
+                répond rapidement.
+              </p>
+            </div>
+
+            <div className="contact-info__grid">
+              <div className="contact-info__card reveal">
+                <h3>Coordonnées</h3>
+                <dl className="detail">
+                  <dt>Téléphone</dt>
+                  <dd>
+                    <a href={`tel:${PHONE_TEL}`}>{PHONE}</a>
+                  </dd>
+                </dl>
+                <dl className="detail">
+                  <dt>E-mail</dt>
+                  <dd>
+                    <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+                  </dd>
+                </dl>
+                <dl className="detail">
+                  <dt>Adresse</dt>
+                  <dd>
+                    <a href={MAPS_URL} target="_blank" rel="noreferrer">
+                      {ADDRESS}
+                    </a>
+                  </dd>
+                </dl>
+                <div className="contact-info__actions">
+                  <a className="btn btn--dark" href={`tel:${PHONE_TEL}`}>
+                    Appeler maintenant
+                  </a>
+                  <a
+                    className="btn btn--outline"
+                    href={MAPS_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Itinéraire
+                  </a>
+                </div>
+              </div>
+
+              <div className="contact-info__card reveal" style={{ transitionDelay: "100ms" }}>
+                <h3>Horaires</h3>
+                <ul className="hours">
+                  {hours.map((h) => (
+                    <li key={h.day}>
+                      <span>{h.day}</span>
+                      <strong>{h.time}</strong>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="contact-info__card reveal" style={{ transitionDelay: "200ms" }}>
+                <h3>Réseaux sociaux</h3>
+                <p className="contact-info__hint">
+                  Suivez l’atelier au quotidien : avant/après, coulisses et
+                  conseils.
+                </p>
+                <div className="contact-info__social">
+                  <a href={TIKTOK_URL} target="_blank" rel="noreferrer">
+                    <TikTokIcon />
+                    TikTok
+                  </a>
+                  <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">
+                    <InstagramIcon />
+                    Instagram
+                  </a>
+                </div>
+              </div>
             </div>
 
             <div className="map-wrap reveal">
@@ -1914,6 +1957,9 @@ export default function App() {
                 </li>
                 <li>
                   <a href="#devis">Devis</a>
+                </li>
+                <li>
+                  <a href="#contact">Contact</a>
                 </li>
                 <li>
                   <a href="#avis">Avis</a>

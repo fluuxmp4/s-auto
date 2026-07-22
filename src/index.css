@@ -704,6 +704,11 @@ ul {
   }
   .nav.is-open .nav__drawer a:nth-child(6) {
     transition-delay: 0.3s;
+  }
+  .nav.is-open .nav__drawer a:nth-child(7) {
+    transition-delay: 0.35s;
+  }
+  .nav__drawer a:last-child {
     font-family: var(--font-body);
     font-size: 0.95rem;
     font-weight: 500;
@@ -1355,22 +1360,7 @@ ul {
 }
 
 .contact__layout {
-  display: grid;
-  gap: 2.2rem;
-  align-items: start;
-}
-
-@media (min-width: 900px) {
-  .contact__layout {
-    grid-template-columns: 0.85fr 1.15fr;
-    gap: 3rem;
-  }
-}
-
-.contact__details {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  max-width: 760px;
 }
 
 .detail dt {
@@ -1615,6 +1605,89 @@ ul {
 .photo-grid__remove:hover {
   background: var(--accent);
   transform: scale(1.12);
+}
+
+/* ================================================================
+   Nous contacter
+================================================================ */
+.contact-info__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.1rem;
+}
+
+.contact-info__card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: 1.9rem 1.7rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition:
+    transform 0.45s var(--ease),
+    box-shadow 0.45s var(--ease);
+}
+
+.contact-info__card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 44px -24px rgba(0, 0, 0, 0.22);
+}
+
+.contact-info__card h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 2px solid var(--accent);
+  align-self: flex-start;
+}
+
+.contact-info__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: auto;
+}
+
+.contact-info__hint {
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.contact-info__social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: auto;
+}
+
+.contact-info__social a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem 1.2rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  transition:
+    background 0.3s,
+    border-color 0.3s,
+    color 0.3s,
+    transform 0.3s var(--ease);
+}
+
+.contact-info__social a:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.contact-info__social svg {
+  width: 17px;
+  height: 17px;
 }
 
 /* —— carte —— */
