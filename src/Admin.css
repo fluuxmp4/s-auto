@@ -1,61 +1,77 @@
-/* Le panel reste toujours en clair — le mode sombre ne s’applique qu’au site public */
+/* ================================================================
+   Panel gérant — design clair, toujours en mode light
+   (le mode sombre ne s'applique qu'au site public)
+================================================================ */
 .admin,
 .admin-login {
   color-scheme: light;
-  color: #0c1222;
-  --text: #0c1222;
-  --text-soft: #2a3d5c;
-  --muted: #5c677a;
-  --bg: #eef2f7;
+  color: #101828;
+  --a-text: #101828;
+  --a-soft: #475467;
+  --a-muted: #667085;
+  --a-bg: #f4f6fa;
+  --a-surface: #ffffff;
+  --a-border: #e4e9f0;
+  --a-navy: #0a1a3a;
+  --a-blue: #0066c8;
+  --a-blue-deep: #004a96;
+  --a-red: #d4001a;
+  --a-red-deep: #a80015;
+  --a-green: #108c46;
+  --a-radius: 12px;
+  --a-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 16px -6px rgba(16, 24, 40, 0.07);
+  --a-font-display: var(--font-display, "Syne", sans-serif);
+
+  /* alias pour composants publics éventuels */
+  --text: #101828;
+  --muted: #667085;
+  --bg: #f4f6fa;
   --surface: #ffffff;
-  --border: #d8e0ec;
-  --ink: #0c1222;
-  --ink-soft: #2a3d5c;
-  --steel: #5c677a;
-  --paper: #eef2f7;
-  --mist: #d8e0ec;
-  --white: #ffffff;
+  --border: #e4e9f0;
   --brand: #0066c8;
-  --brand-deep: #004a96;
   --accent: #d4001a;
-  --accent-deep: #a80015;
 }
 
+/* ================================================================
+   Écran de connexion
+================================================================ */
 .admin-login {
   min-height: 100svh;
   display: grid;
   place-items: center;
   padding: 1.5rem;
   background:
-    radial-gradient(ellipse 70% 50% at 10% 0%, rgba(0, 102, 200, 0.14), transparent),
-    #eef2f7;
+    radial-gradient(ellipse 60% 45% at 15% 0%, rgba(0, 102, 200, 0.12), transparent),
+    radial-gradient(ellipse 50% 40% at 100% 100%, rgba(212, 0, 26, 0.06), transparent),
+    #f4f6fa;
 }
 
 .admin-login__card {
-  width: min(400px, 100%);
-  background: #fff;
-  padding: 1.75rem;
-  border-radius: 14px;
+  width: min(410px, 100%);
+  background: var(--a-surface);
+  padding: 2.2rem 2rem;
+  border: 1px solid var(--a-border);
+  border-radius: 16px;
   display: grid;
-  gap: 0.85rem;
-  box-shadow: 0 16px 40px rgba(12, 18, 34, 0.1);
+  gap: 0.9rem;
+  box-shadow: 0 24px 60px -24px rgba(10, 26, 58, 0.25);
 }
 
 .admin-login__brand {
-  font-family: var(--font-display, Syne, sans-serif);
+  font-family: var(--a-font-display);
   font-weight: 800;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   letter-spacing: -0.03em;
   margin: 0;
 }
 
 .admin-login__brand span {
-  color: #0066c8;
+  color: var(--a-blue);
 }
 
 .admin-login h1 {
-  font-family: var(--font-display, Syne, sans-serif);
-  font-size: 1.35rem;
+  font-family: var(--a-font-display);
+  font-size: 1.3rem;
   margin: 0;
   letter-spacing: -0.02em;
 }
@@ -63,25 +79,40 @@
 .admin-login__hint,
 .admin__muted,
 .admin__sub {
-  color: #5c677a;
+  color: var(--a-muted);
   font-size: 0.9rem;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .admin-login label {
   display: grid;
-  gap: 0.35rem;
-  font-size: 0.8rem;
-  font-weight: 500;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--a-soft);
 }
 
 .admin-login input,
 .admin__hours input,
 .devis-actions select {
   font: inherit;
-  padding: 0.75rem 0.85rem;
-  border: 1px solid #d8e0ec;
-  border-radius: 8px;
+  color: var(--a-text);
+  background: #fbfcfe;
+  padding: 0.8rem 0.95rem;
+  border: 1px solid var(--a-border);
+  border-radius: 9px;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.admin-login input:focus,
+.admin__hours input:focus,
+.devis-actions select:focus {
+  outline: none;
+  border-color: var(--a-blue);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(0, 102, 200, 0.12);
 }
 
 .admin-login button,
@@ -91,62 +122,99 @@
   font: inherit;
   cursor: pointer;
   border: none;
-  border-radius: 8px;
-  padding: 0.75rem 1rem;
+  border-radius: 9px;
+  padding: 0.75rem 1.1rem;
   font-weight: 600;
+  transition: background 0.2s, transform 0.15s ease, box-shadow 0.2s,
+    border-color 0.2s, color 0.2s;
 }
 
 .admin-login button {
-  background: #0066c8;
+  background: var(--a-blue);
   color: #fff;
+  padding: 0.85rem 1.1rem;
+  margin-top: 0.3rem;
+}
+
+.admin-login button:hover {
+  background: var(--a-blue-deep);
+}
+
+.admin-login button:disabled {
+  opacity: 0.65;
+  cursor: wait;
 }
 
 .admin-login__back {
   text-align: center;
   font-size: 0.88rem;
-  color: #5c677a;
+  color: var(--a-muted);
+  text-decoration: none;
+  transition: color 0.2s;
 }
 
-.admin-alert {
-  background: rgba(212, 0, 26, 0.08);
-  border-left: 3px solid #d4001a;
-  color: #a80015;
-  padding: 0.75rem;
-  font-size: 0.88rem;
+.admin-login__back:hover {
+  color: var(--a-blue);
+}
+
+/* ================================================================
+   Alertes
+================================================================ */
+.admin-alert,
+.admin-ok {
+  border-radius: 9px;
+  padding: 0.8rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
   margin: 0;
 }
 
-.admin-ok {
-  background: rgba(16, 140, 70, 0.1);
-  border-left: 3px solid #108c46;
-  color: #0a5c2e;
-  padding: 0.75rem 1rem;
-  margin: 0 1.25rem;
-  font-size: 0.9rem;
+.admin-alert {
+  background: rgba(212, 0, 26, 0.07);
+  border: 1px solid rgba(212, 0, 26, 0.25);
+  color: var(--a-red-deep);
 }
 
+.admin-ok {
+  background: rgba(16, 140, 70, 0.08);
+  border: 1px solid rgba(16, 140, 70, 0.28);
+  color: #0a5c2e;
+}
+
+.admin > .admin-alert,
+.admin > .admin-ok {
+  margin: 1rem auto 0;
+  width: min(1180px, calc(100% - 3rem));
+}
+
+/* ================================================================
+   Structure générale
+================================================================ */
 .admin {
   min-height: 100svh;
-  background: #eef2f7;
-  color: #0c1222;
+  background: var(--a-bg);
 }
 
 .admin__top {
+  position: sticky;
+  top: 0;
+  z-index: 20;
   display: flex;
   justify-content: space-between;
   gap: 1rem;
   align-items: center;
-  padding: 1.1rem 1.25rem;
-  background: #0a1a3a;
+  padding: 0.9rem 1.5rem;
+  background: var(--a-navy);
   color: #fff;
+  box-shadow: 0 4px 20px -8px rgba(10, 26, 58, 0.45);
 }
 
 .admin__brand {
-  font-family: var(--font-display, Syne, sans-serif);
+  font-family: var(--a-font-display);
   font-weight: 800;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   margin: 0;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
 }
 
 .admin__brand span {
@@ -154,89 +222,171 @@
 }
 
 .admin__sub {
-  margin: 0.2rem 0 0;
-  color: rgba(255, 255, 255, 0.65);
+  margin: 0.1rem 0 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
 }
 
 .admin__top-actions {
   display: flex;
-  gap: 0.6rem;
+  gap: 0.75rem;
   align-items: center;
 }
 
 .admin__top-actions a {
-  color: #fff;
+  color: rgba(255, 255, 255, 0.85);
   font-size: 0.88rem;
   font-weight: 500;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.admin__top-actions a:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
 }
 
 .admin__top-actions button {
-  background: #0066c8;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: #fff;
+  font-size: 0.85rem;
+  padding: 0.55rem 0.95rem;
 }
 
+.admin__top-actions button:hover {
+  background: var(--a-red);
+  border-color: var(--a-red);
+}
+
+/* ================================================================
+   Onglets
+================================================================ */
 .admin__tabs {
   display: flex;
-  gap: 0.5rem;
-  padding: 1rem 1.25rem 0;
+  gap: 0.25rem;
+  padding: 0.9rem 1.5rem 0;
+  width: min(1180px, 100%);
+  margin-inline: auto;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--a-border);
 }
 
 .admin__tabs button {
-  background: #fff;
-  border: 1px solid #d8e0ec;
-  padding: 0.65rem 1rem;
-  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  border-bottom: 2.5px solid transparent;
+  border-radius: 0;
+  padding: 0.7rem 0.9rem 0.85rem;
   font-weight: 600;
-  font-size: 0.88rem;
+  font-size: 0.92rem;
   cursor: pointer;
-  color: #0c1222;
+  color: var(--a-muted);
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.admin__tabs button:hover {
+  color: var(--a-text);
 }
 
 .admin__tabs button.is-active {
-  background: #0066c8;
-  border-color: #0066c8;
-  color: #fff;
+  color: var(--a-blue);
+  border-bottom-color: var(--a-blue);
 }
 
+.tab-badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.45rem;
+  height: 1.45rem;
+  padding: 0 0.4rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: #e8edf4;
+  color: var(--a-soft);
+}
+
+.admin__tabs button.is-active .tab-badge {
+  background: rgba(0, 102, 200, 0.12);
+  color: var(--a-blue);
+}
+
+.tab-badge--hot {
+  background: var(--a-red) !important;
+  color: #fff !important;
+}
+
+/* ================================================================
+   Conteneurs d'onglets
+================================================================ */
+.admin__devis,
+.admin__hours,
+.admin__avis,
+.admin__pellicule,
+.admin__theme {
+  width: min(1180px, 100%);
+  margin-inline: auto;
+  padding: 1.4rem 1.5rem 3rem;
+}
+
+.admin__avis {
+  max-width: 780px;
+  margin-inline: auto;
+}
+
+/* ================================================================
+   Devis — filtres
+================================================================ */
 .admin__filters {
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.1rem;
 }
 
 .admin__filters button {
-  background: #fff;
-  border: 1px solid #d8e0ec;
-  font-size: 0.8rem;
-  padding: 0.45rem 0.75rem;
-  color: #0c1222;
+  background: var(--a-surface);
+  border: 1px solid var(--a-border);
+  font-size: 0.82rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  color: var(--a-soft);
+}
+
+.admin__filters button:hover {
+  border-color: #b9c6d8;
 }
 
 .admin__filters button.is-active {
-  background: #0a1a3a;
+  background: var(--a-navy);
   color: #fff;
-  border-color: #0a1a3a;
+  border-color: var(--a-navy);
 }
 
 .admin__filters .ghost {
   margin-left: auto;
   background: transparent;
+  border-style: dashed;
 }
 
-.admin__devis,
-.admin__hours {
-  padding: 1rem 1.25rem 2rem;
-}
-
+/* ================================================================
+   Devis — liste + détail
+================================================================ */
 .admin__split {
   display: grid;
-  gap: 1rem;
+  gap: 1.1rem;
 }
 
 @media (min-width: 900px) {
   .admin__split {
-    grid-template-columns: 1fr 1.2fr;
+    grid-template-columns: 0.9fr 1.3fr;
     align-items: start;
   }
 }
@@ -246,73 +396,82 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.5rem;
+  gap: 0.55rem;
 }
 
 .devis-row {
   width: 100%;
   text-align: left;
-  background: #fff;
-  border: 1px solid #d8e0ec;
-  border-radius: 10px;
-  padding: 0.85rem 1rem;
+  background: var(--a-surface);
+  border: 1px solid var(--a-border);
+  border-radius: var(--a-radius);
+  padding: 0.9rem 1.05rem;
   display: grid;
-  gap: 0.25rem;
+  gap: 0.3rem;
   cursor: pointer;
-  color: #0c1222;
+  color: var(--a-text);
+  box-shadow: var(--a-shadow);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s ease;
+}
+
+.devis-row:hover {
+  border-color: #b9c6d8;
+  transform: translateY(-1px);
 }
 
 .devis-row.is-active {
-  border-color: #0066c8;
-  box-shadow: 0 0 0 2px rgba(0, 102, 200, 0.15);
+  border-color: var(--a-blue);
+  box-shadow: 0 0 0 3px rgba(0, 102, 200, 0.14), var(--a-shadow);
 }
 
 .devis-row strong {
-  font-size: 1rem;
+  font-size: 0.98rem;
 }
 
 .devis-row span,
 .devis-row time {
   font-size: 0.82rem;
-  color: #5c677a;
+  color: var(--a-muted);
 }
 
 .badge {
   display: inline-flex;
   width: fit-content;
-  padding: 0.2rem 0.55rem;
+  padding: 0.22rem 0.6rem;
   border-radius: 999px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 .badge--nouveau {
-  background: rgba(212, 0, 26, 0.12);
-  color: #d4001a;
+  background: rgba(212, 0, 26, 0.1);
+  color: var(--a-red);
 }
 
 .badge--en_cours {
-  background: rgba(0, 102, 200, 0.12);
-  color: #0066c8;
+  background: rgba(0, 102, 200, 0.1);
+  color: var(--a-blue);
 }
 
 .badge--traite {
-  background: rgba(16, 140, 70, 0.12);
+  background: rgba(16, 140, 70, 0.1);
   color: #0a5c2e;
 }
 
 .badge--archive {
-  background: #e8edf4;
-  color: #5c677a;
+  background: #eceff4;
+  color: var(--a-muted);
 }
 
 .devis-detail {
-  background: #fff;
-  border: 1px solid #d8e0ec;
-  border-radius: 12px;
-  padding: 1.15rem;
+  background: var(--a-surface);
+  border: 1px solid var(--a-border);
+  border-radius: var(--a-radius);
+  padding: 1.5rem;
   min-height: 280px;
+  box-shadow: var(--a-shadow);
 }
 
 .devis-detail__head {
@@ -320,28 +479,37 @@
   justify-content: space-between;
   gap: 1rem;
   align-items: start;
-  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.1rem;
+  border-bottom: 1px solid var(--a-border);
 }
 
 .devis-detail h2 {
-  font-family: var(--font-display, Syne, sans-serif);
+  font-family: var(--a-font-display);
   margin: 0;
   font-size: 1.35rem;
   letter-spacing: -0.02em;
 }
 
-.devis-detail h3 {
+.devis-detail__head p {
+  margin: 0.2rem 0 0;
   font-size: 0.85rem;
-  letter-spacing: 0.08em;
+  color: var(--a-muted);
+}
+
+.devis-detail h3 {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #0066c8;
-  margin: 1.1rem 0 0.45rem;
+  color: var(--a-muted);
+  margin: 1.3rem 0 0.5rem;
 }
 
 .devis-meta {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
+  gap: 0.85rem;
+  margin: 0;
 }
 
 @media (min-width: 700px) {
@@ -351,109 +519,175 @@
 }
 
 .devis-meta dt {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #5c677a;
+  letter-spacing: 0.1em;
+  color: var(--a-muted);
 }
 
 .devis-meta dd {
-  margin: 0.2rem 0 0;
+  margin: 0.25rem 0 0;
   font-weight: 600;
+  font-size: 0.92rem;
+  overflow-wrap: anywhere;
+}
+
+.devis-meta dd a {
+  color: var(--a-blue);
+  text-decoration: none;
+}
+
+.devis-meta dd a:hover {
+  text-decoration: underline;
 }
 
 .devis-message {
   white-space: pre-wrap;
-  background: #f4f7fb;
-  padding: 0.85rem;
-  border-radius: 8px;
+  background: #f7f9fc;
+  border: 1px solid var(--a-border);
+  padding: 0.9rem 1rem;
+  border-radius: 9px;
   margin: 0;
+  font-size: 0.92rem;
 }
 
 .devis-photos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-  gap: 0.55rem;
+  gap: 0.6rem;
+}
+
+.devis-photos a {
+  border-radius: 9px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s;
+}
+
+.devis-photos a:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 24px -10px rgba(16, 24, 40, 0.35);
 }
 
 .devis-photos img {
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
-  border-radius: 8px;
   display: block;
 }
 
 .devis-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.65rem;
+  gap: 0.7rem;
   align-items: end;
-  margin-top: 1.25rem;
+  margin-top: 1.4rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--a-border);
 }
 
 .devis-actions label {
   display: grid;
-  gap: 0.3rem;
-  font-size: 0.8rem;
-  font-weight: 500;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--a-soft);
 }
 
+/* ================================================================
+   Boutons
+================================================================ */
 .btn {
-  background: #0a1a3a;
+  background: var(--a-navy);
   color: #fff;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px -8px rgba(10, 26, 58, 0.5);
 }
 
 .btn.primary {
-  background: #0066c8;
+  background: var(--a-blue);
+}
+
+.btn.primary:hover {
+  background: var(--a-blue-deep);
 }
 
 .btn.danger {
-  background: #d4001a;
+  background: transparent;
+  color: var(--a-red);
+  border: 1px solid rgba(212, 0, 26, 0.35);
+}
+
+.btn.danger:hover {
+  background: var(--a-red);
+  color: #fff;
+  border-color: var(--a-red);
+  box-shadow: 0 8px 18px -8px rgba(212, 0, 26, 0.5);
+}
+
+/* ================================================================
+   Horaires
+================================================================ */
+.admin__hours {
+  max-width: 640px;
 }
 
 .hours-row {
   display: grid;
-  grid-template-columns: 1fr 1.4fr;
+  grid-template-columns: 1fr 1.5fr;
   gap: 0.75rem;
   margin-bottom: 0.75rem;
+  padding: 0.9rem 1rem;
+  background: var(--a-surface);
+  border: 1px solid var(--a-border);
+  border-radius: var(--a-radius);
+  box-shadow: var(--a-shadow);
 }
 
 .hours-row label {
   display: grid;
-  gap: 0.3rem;
-  font-size: 0.8rem;
-  font-weight: 500;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--a-soft);
 }
 
 .admin__hours .btn {
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
 }
 
-.admin__avis {
-  padding: 1rem 1.25rem 2rem;
-  max-width: 720px;
-}
-
-.admin__pellicule {
-  padding: 1rem 1.25rem 2rem;
-  max-width: 960px;
-}
-
+/* ================================================================
+   Pellicule
+================================================================ */
 .pellicule-upload {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  margin: 0.75rem 0 1.25rem;
-  padding: 0.85rem 1.1rem;
-  background: #0066c8;
+  margin: 0.75rem 0 1.4rem;
+  padding: 0.85rem 1.2rem;
+  background: var(--a-blue);
   color: #fff;
-  border-radius: 8px;
+  border-radius: 9px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s, transform 0.15s ease, box-shadow 0.2s;
+}
+
+.pellicule-upload:hover {
+  background: var(--a-blue-deep);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px -10px rgba(0, 102, 200, 0.6);
 }
 
 .pellicule-upload input {
@@ -465,18 +699,25 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.85rem;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.9rem;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
 }
 
 .pellicule-admin-grid li {
-  background: #fff;
-  border: 1px solid #d8e0ec;
-  border-radius: 10px;
+  background: var(--a-surface);
+  border: 1px solid var(--a-border);
+  border-radius: var(--a-radius);
   overflow: hidden;
   display: grid;
-  gap: 0.5rem;
-  padding-bottom: 0.65rem;
+  gap: 0.6rem;
+  padding-bottom: 0.7rem;
+  box-shadow: var(--a-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s;
+}
+
+.pellicule-admin-grid li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -14px rgba(16, 24, 40, 0.25);
 }
 
 .pellicule-admin-grid img {
@@ -487,26 +728,29 @@
 }
 
 .pellicule-admin-grid .btn {
-  margin: 0 0.65rem;
-  justify-content: center;
+  margin: 0 0.7rem;
   font-size: 0.8rem;
   padding: 0.45rem 0.6rem;
 }
 
+/* ================================================================
+   Avis
+================================================================ */
 .avis-admin-list {
   list-style: none;
   margin: 1rem 0 0;
   padding: 0;
   display: grid;
-  gap: 0.75rem;
+  gap: 0.8rem;
 }
 
 .avis-admin-card {
-  background: #fff;
-  border: 1px solid #d8e0ec;
-  border-radius: 12px;
-  padding: 1rem;
-  color: #0c1222;
+  background: var(--a-surface);
+  border: 1px solid var(--a-border);
+  border-radius: var(--a-radius);
+  padding: 1.1rem 1.2rem;
+  color: var(--a-text);
+  box-shadow: var(--a-shadow);
 }
 
 .avis-admin-card__top {
@@ -514,19 +758,19 @@
   justify-content: space-between;
   gap: 0.75rem;
   align-items: center;
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.5rem;
 }
 
 .avis-admin-stars {
-  color: #d4001a;
-  letter-spacing: 0.08em;
+  color: #eeb115;
+  letter-spacing: 0.1em;
 }
 
 .avis-admin-card p {
   margin: 0;
-  color: #3a4558;
+  color: var(--a-soft);
   font-size: 0.92rem;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 .avis-admin-card__bottom {
@@ -534,111 +778,94 @@
   justify-content: space-between;
   align-items: center;
   gap: 0.75rem;
-  margin-top: 0.85rem;
+  margin-top: 0.9rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--a-border);
 }
 
 .avis-admin-card__bottom time {
   font-size: 0.8rem;
-  color: #5c677a;
+  color: var(--a-muted);
 }
 
+.avis-admin-card__bottom .btn {
+  font-size: 0.8rem;
+  padding: 0.45rem 0.8rem;
+}
+
+/* ================================================================
+   Apparence
+================================================================ */
 .admin__theme {
-  padding: 1rem 1.25rem 2rem;
-  max-width: 900px;
+  max-width: 940px;
 }
 
 .admin__theme-title {
-  margin: 1.25rem 0 0.65rem;
-  font-size: 0.78rem;
-  letter-spacing: 0.1em;
+  margin: 1.4rem 0 0.7rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #5c677a;
+  color: var(--a-muted);
 }
 
 .mode-grid {
   display: grid;
-  gap: 0.75rem;
+  gap: 0.8rem;
   grid-template-columns: 1fr 1fr;
   margin-bottom: 0.5rem;
 }
 
-.mode-card {
+.mode-card,
+.theme-card {
   display: grid;
-  gap: 0.35rem;
+  gap: 0.4rem;
   text-align: left;
-  padding: 1rem;
-  border-radius: 12px;
-  border: 2px solid #d8e0ec;
-  background: #fff;
+  padding: 1.1rem;
+  border-radius: var(--a-radius);
+  border: 2px solid var(--a-border);
+  background: var(--a-surface);
   cursor: pointer;
   font: inherit;
-  color: #0c1222;
+  color: var(--a-text);
+  box-shadow: var(--a-shadow);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s ease;
 }
 
-.mode-card:hover {
-  border-color: #9eb0c8;
+.mode-card:hover,
+.theme-card:hover {
+  border-color: #b9c6d8;
+  transform: translateY(-1px);
 }
 
-.mode-card.is-active {
-  border-color: #0066c8;
-  box-shadow: 0 0 0 3px rgba(0, 102, 200, 0.15);
+.mode-card.is-active,
+.theme-card.is-active {
+  border-color: var(--a-blue);
+  box-shadow: 0 0 0 3px rgba(0, 102, 200, 0.14), var(--a-shadow);
 }
 
-.mode-card strong {
-  font-family: var(--font-display, Syne, sans-serif);
-  font-size: 1.05rem;
+.mode-card strong,
+.theme-card strong {
+  font-family: var(--a-font-display);
+  font-size: 1.02rem;
 }
 
-.mode-card span {
+.mode-card span,
+.theme-card > span:last-child {
   font-size: 0.82rem;
-  color: #5c677a;
-  line-height: 1.4;
+  color: var(--a-muted);
+  line-height: 1.45;
 }
 
 .theme-grid {
   display: grid;
-  gap: 0.85rem;
-  margin: 1rem 0 1.25rem;
+  gap: 0.9rem;
+  margin: 0.5rem 0 1.4rem;
 }
 
 @media (min-width: 720px) {
   .theme-grid {
     grid-template-columns: repeat(3, 1fr);
   }
-}
-
-.theme-card {
-  display: grid;
-  gap: 0.45rem;
-  text-align: left;
-  padding: 1rem;
-  border-radius: 12px;
-  border: 2px solid #d8e0ec;
-  background: #fff;
-  cursor: pointer;
-  font: inherit;
-  color: #0c1222;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.theme-card:hover {
-  border-color: #9eb0c8;
-}
-
-.theme-card.is-active {
-  border-color: #0066c8;
-  box-shadow: 0 0 0 3px rgba(0, 102, 200, 0.15);
-}
-
-.theme-card strong {
-  font-family: var(--font-display, Syne, sans-serif);
-  font-size: 1.05rem;
-}
-
-.theme-card > span:last-child {
-  font-size: 0.82rem;
-  color: #5c677a;
-  line-height: 1.4;
 }
 
 .theme-card__swatches {
@@ -648,8 +875,9 @@
 }
 
 .theme-card__swatch {
-  width: 1.65rem;
-  height: 1.65rem;
+  width: 1.7rem;
+  height: 1.7rem;
   border-radius: 999px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(16, 24, 40, 0.2);
 }

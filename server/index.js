@@ -315,16 +315,17 @@ app.use((req, res, next) => {
 const ALLOWED_ORIGINS = new Set(
   [
     "https://sauto-kq4l.onrender.com",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
     process.env.SITE_ORIGIN, // origine supplémentaire (futur nom de domaine)
   ].filter(Boolean),
 );
+const LOCAL_ORIGIN = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
 app.use(
   cors({
     origin(origin, cb) {
       // Requêtes same-origin / serveur-à-serveur : pas d'en-tête Origin
-      if (!origin || ALLOWED_ORIGINS.has(origin)) return cb(null, true);
+      if (!origin || ALLOWED_ORIGINS.has(origin) || LOCAL_ORIGIN.test(origin)) {
+        return cb(null, true);
+      }
       return cb(new Error("Origine non autorisée"));
     },
   }),

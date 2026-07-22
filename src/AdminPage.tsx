@@ -334,21 +334,26 @@ export default function AdminPage() {
           className={tab === "devis" ? "is-active" : ""}
           onClick={() => setTab("devis")}
         >
-          Devis ({counts.nouveau} nouveaux)
+          Devis
+          {counts.nouveau > 0 && (
+            <span className="tab-badge tab-badge--hot">{counts.nouveau}</span>
+          )}
         </button>
         <button
           type="button"
           className={tab === "avis" ? "is-active" : ""}
           onClick={() => setTab("avis")}
         >
-          Avis ({avisList.length})
+          Avis
+          <span className="tab-badge">{avisList.length}</span>
         </button>
         <button
           type="button"
           className={tab === "pellicule" ? "is-active" : ""}
           onClick={() => setTab("pellicule")}
         >
-          Pellicule ({pellicule.length})
+          Pellicule
+          <span className="tab-badge">{pellicule.length}</span>
         </button>
         <button
           type="button"
