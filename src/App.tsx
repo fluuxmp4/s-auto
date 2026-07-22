@@ -601,6 +601,11 @@ async function buildDevisPdf(input: {
   );
 }
 
+const TIKTOK_URL =
+  "https://www.tiktok.com/@sauto69230?is_from_webapp=1&sender_device=pc";
+const INSTAGRAM_URL =
+  "https://www.instagram.com/sauto.693230?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==";
+
 const MAPS_URL =
   "https://www.google.com/maps/search/?api=1&query=S+AUTO+Carrosserie+14+Chemin+de+Chapoly-Laval+69230+Saint-Genis-Laval";
 const MAPS_EMBED =
@@ -746,6 +751,32 @@ function MailIcon() {
         strokeWidth="1.6"
         strokeLinejoin="round"
       />
+    </svg>
+  );
+}
+
+function TikTokIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M19.6 7.1a5.3 5.3 0 0 1-3.1-1V15a5.6 5.6 0 1 1-5.6-5.6c.3 0 .6 0 .9.1v2.9a2.7 2.7 0 1 0 1.9 2.6V2.5h2.8a5.3 5.3 0 0 0 3.1 4.3v2.9-2.6Z" />
+    </svg>
+  );
+}
+
+function InstagramIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect
+        x="3.2"
+        y="3.2"
+        width="17.6"
+        height="17.6"
+        rx="4.6"
+        stroke="currentColor"
+        strokeWidth="1.7"
+      />
+      <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.7" />
+      <circle cx="17.1" cy="6.9" r="1.2" fill="currentColor" />
     </svg>
   );
 }
@@ -1800,6 +1831,25 @@ export default function App() {
                 <br />
                 Saint-Genis-Laval, près de Lyon
               </p>
+              <p className="footer__follow">Suivez-nous sur les réseaux</p>
+              <div className="footer__social">
+                <a
+                  href={TIKTOK_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="TikTok — S AUTO"
+                >
+                  <TikTokIcon />
+                </a>
+                <a
+                  href={INSTAGRAM_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Instagram — S AUTO"
+                >
+                  <InstagramIcon />
+                </a>
+              </div>
             </div>
             <div className="footer__col">
               <h3>Contact</h3>
