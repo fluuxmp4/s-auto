@@ -1585,7 +1585,8 @@ export default function App() {
                       Ajouter des photos
                     </span>
                     <span className="photo-drop__hint">
-                      Jusqu’à {MAX_PHOTOS} images · 4 Mo max chacune
+                      Depuis votre galerie ou l’appareil photo · jusqu’à{" "}
+                      {MAX_PHOTOS} images · 4 Mo max chacune
                     </span>
                     <input
                       id="photos"
@@ -1593,7 +1594,6 @@ export default function App() {
                       type="file"
                       accept="image/*"
                       multiple
-                      capture="environment"
                       onChange={handlePhotosChange}
                     />
                   </label>
