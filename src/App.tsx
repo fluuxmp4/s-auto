@@ -851,6 +851,7 @@ export default function App() {
   const [avisError, setAvisError] = useState("");
   const [pellicule, setPellicule] = useState<PelliculePhoto[]>([]);
   const [lightbox, setLightbox] = useState<PelliculePhoto | null>(null);
+  const [avisExpanded, setAvisExpanded] = useState(false);
   const pageRef = useReveal();
 
   const avisAverage = useMemo(() => {
@@ -1777,7 +1778,7 @@ export default function App() {
             )}
 
             <div className="avis__grid">
-              {reviews.map((r, i) => (
+              {(avisExpanded ? reviews : reviews.slice(0, 6)).map((r, i) => (
                 <article
                   key={r.id}
                   className="avis__item reveal"
@@ -1797,6 +1798,20 @@ export default function App() {
                 </article>
               ))}
             </div>
+
+            {reviews.length > 6 && (
+              <div className="avis__more">
+                <button
+                  type="button"
+                  className="btn btn--outline"
+                  onClick={() => setAvisExpanded((v) => !v)}
+                >
+                  {avisExpanded
+                    ? "Voir moins"
+                    : `Voir plus d’avis (${reviews.length - 6})`}
+                </button>
+              </div>
+            )}
           </div>
         </section>
 
