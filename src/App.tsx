@@ -625,7 +625,7 @@ const SERVICES = [
   {
     num: "03",
     name: "Pare-brise & vitrage",
-    desc: "Réparation d’impacts et remplacement de pare-brise, vitres latérales et lunettes arrière. Intervention rapide, toutes marques.",
+    desc: "Réparation d’impacts et remplacement de pare-brise, vitres latérales et lunettes arrière. Intervention rapide, toutes marques, toutes assurances.",
   },
   {
     num: "04",
