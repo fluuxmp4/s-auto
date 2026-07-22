@@ -1377,6 +1377,12 @@ export default function App() {
                 </strong>
                 <span>Toutes marques</span>
               </div>
+              <div className="stats__item" role="listitem">
+                <strong>
+                  <Counter to={100} suffix="%" />
+                </strong>
+                <span>Toutes assurances</span>
+              </div>
             </div>
 
             <div className="atouts__grid">
