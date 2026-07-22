@@ -629,6 +629,21 @@ const SERVICES = [
   },
   {
     num: "04",
+    name: "Grêle & débosselage",
+    desc: "Débosselage sans peinture (DSP) pour impacts de grêle et petites bosses. La carrosserie d’origine est préservée, sans mastic ni peinture.",
+  },
+  {
+    num: "05",
+    name: "Jantes",
+    desc: "Rénovation de jantes rayées, frottées ou voilées. Reprise de la teinte et de la finition d’origine pour un rendu comme neuf.",
+  },
+  {
+    num: "06",
+    name: "Rénovation des phares",
+    desc: "Polissage et traitement des optiques ternis ou jaunis. Retrouvez une meilleure visibilité de nuit et un véhicule plus valorisé.",
+  },
+  {
+    num: "07",
     name: "Assurances & sinistres",
     desc: "Prise en charge des démarches de déclaration sinistre. Nous travaillons avec toutes les assurances pour simplifier votre dossier.",
   },
@@ -1581,6 +1596,9 @@ export default function App() {
                     <option>Carrosserie</option>
                     <option>Peinture</option>
                     <option>Pare-brise / vitrage</option>
+                    <option>Grêle / débosselage</option>
+                    <option>Jantes</option>
+                    <option>Rénovation des phares</option>
                     <option>Sinistre assurance</option>
                     <option>Autre</option>
                   </select>
