@@ -221,6 +221,60 @@ export function deletePellicule(id: string) {
   });
 }
 
+export type RdvStatus = "prevu" | "en_cours" | "termine" | "annule";
+
+export type RendezVousItem = {
+  id: string;
+  title: string;
+  client: string;
+  phone: string;
+  service: string;
+  date: string;
+  time: string;
+  duration: number;
+  notes: string;
+  status: RdvStatus;
+  createdAt: string;
+  updatedAt?: string;
+};
+
+export function fetchRendezVous() {
+  return api<{ rendezVous: RendezVousItem[] }>("/api/rendez-vous", {
+    auth: true,
+  });
+}
+
+export function createRendezVous(
+  input: Omit<RendezVousItem, "id" | "createdAt" | "updatedAt">,
+) {
+  return api<{ ok: boolean; rendezVous: RendezVousItem }>("/api/rendez-vous", {
+    method: "POST",
+    auth: true,
+    body: JSON.stringify(input),
+  });
+}
+
+export function updateRendezVous(
+  id: string,
+  input: Omit<RendezVousItem, "id" | "createdAt" | "updatedAt">,
+) {
+  return api<{ ok: boolean; rendezVous: RendezVousItem }>(
+    `/api/rendez-vous/${id}`,
+    {
+      method: "PATCH",
+      auth: true,
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export function deleteRendezVous(id: string) {
+  return api<{ ok: boolean }>(`/api/rendez-vous/${id}`, {
+    method: "DELETE",
+    auth: true,
+  });
+}
+
 export async function submitDevis(input: {
   prenom: string;
   name: string;

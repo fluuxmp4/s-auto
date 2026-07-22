@@ -171,6 +171,7 @@ function readDb() {
       avis: DEFAULT_AVIS.map((a) => ({ ...a })),
       avisVersion: AVIS_VERSION,
       pellicule: [],
+      rendezVous: [],
       manager: { username: MANAGER_USER, passwordHash },
     };
     fs.writeFileSync(DB_PATH, JSON.stringify(initial, null, 2), "utf8");
@@ -693,6 +694,114 @@ app.delete("/api/pellicule/:id", auth, (req, res) => {
       }
     }
   }
+  res.json({ ok: true });
+});
+
+/* ---------- Rendez-vous / calendrier atelier ---------- */
+const RDV_STATUSES = ["prevu", "en_cours", "termine", "annule"];
+
+function ensureRendezVous(db) {
+  if (!Array.isArray(db.rendezVous)) {
+    db.rendezVous = [];
+    writeDb(db);
+  }
+  return db.rendezVous;
+}
+
+function sanitizeRdv(body, existing = null) {
+  const title = String(body?.title || "").trim().slice(0, 120);
+  const client = String(body?.client || "").trim().slice(0, 80);
+  const phone = String(body?.phone || "").trim().slice(0, 40);
+  const service = String(body?.service || "").trim().slice(0, 80);
+  const date = String(body?.date || "").trim().slice(0, 10);
+  const time = String(body?.time || "").trim().slice(0, 5);
+  const notes = String(body?.notes || "").trim().slice(0, 1000);
+  const duration = Math.min(
+    480,
+    Math.max(15, Number(body?.duration) || existing?.duration || 60),
+  );
+  const status = RDV_STATUSES.includes(body?.status)
+    ? body.status
+    : existing?.status || "prevu";
+
+  if (!title) return { error: "Titre obligatoire" };
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    return { error: "Date invalide (AAAA-MM-JJ)" };
+  }
+  if (!/^\d{2}:\d{2}$/.test(time)) {
+    return { error: "Heure invalide (HH:MM)" };
+  }
+
+  return {
+    title,
+    client,
+    phone,
+    service,
+    date,
+    time,
+    duration,
+    notes,
+    status,
+  };
+}
+
+app.get("/api/rendez-vous", auth, (_req, res) => {
+  const db = readDb();
+  const list = ensureRendezVous(db)
+    .slice()
+    .sort((a, b) =>
+      `${a.date}T${a.time}`.localeCompare(`${b.date}T${b.time}`),
+    );
+  res.json({ rendezVous: list });
+});
+
+app.post("/api/rendez-vous", auth, (req, res) => {
+  const cleaned = sanitizeRdv(req.body);
+  if (cleaned.error) return res.status(400).json({ error: cleaned.error });
+
+  const db = readDb();
+  ensureRendezVous(db);
+  const now = new Date().toISOString();
+  const entry = {
+    id: randomUUID(),
+    ...cleaned,
+    createdAt: now,
+    updatedAt: now,
+  };
+  db.rendezVous = [entry, ...(db.rendezVous || [])];
+  writeDb(db);
+  res.status(201).json({ ok: true, rendezVous: entry });
+});
+
+app.patch("/api/rendez-vous/:id", auth, (req, res) => {
+  const id = String(req.params.id || "");
+  const db = readDb();
+  ensureRendezVous(db);
+  const idx = db.rendezVous.findIndex((r) => r.id === id);
+  if (idx < 0) return res.status(404).json({ error: "Rendez-vous introuvable" });
+
+  const cleaned = sanitizeRdv(req.body, db.rendezVous[idx]);
+  if (cleaned.error) return res.status(400).json({ error: cleaned.error });
+
+  db.rendezVous[idx] = {
+    ...db.rendezVous[idx],
+    ...cleaned,
+    updatedAt: new Date().toISOString(),
+  };
+  writeDb(db);
+  res.json({ ok: true, rendezVous: db.rendezVous[idx] });
+});
+
+app.delete("/api/rendez-vous/:id", auth, (req, res) => {
+  const id = String(req.params.id || "");
+  const db = readDb();
+  ensureRendezVous(db);
+  const before = db.rendezVous.length;
+  db.rendezVous = db.rendezVous.filter((r) => r.id !== id);
+  if (db.rendezVous.length === before) {
+    return res.status(404).json({ error: "Rendez-vous introuvable" });
+  }
+  writeDb(db);
   res.json({ ok: true });
 });
 

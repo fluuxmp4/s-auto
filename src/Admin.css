@@ -888,3 +888,446 @@
   border: 2px solid rgba(255, 255, 255, 0.25);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
+
+/* ================================================================
+   Tableau de bord
+================================================================ */
+.admin__dashboard,
+.admin__agenda {
+  width: min(1180px, 100%);
+  margin-inline: auto;
+  padding: 1.4rem 1.5rem 3rem;
+}
+
+.dash-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1.2rem;
+}
+
+.dash-head h2 {
+  font-family: var(--a-font-display);
+  margin: 0;
+  font-size: 1.45rem;
+  letter-spacing: -0.02em;
+}
+
+.dash-head .admin__muted {
+  margin: 0.25rem 0 0;
+}
+
+.dash-grid {
+  display: grid;
+  gap: 0.85rem;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  margin-bottom: 1.3rem;
+}
+
+.dash-card {
+  text-align: left;
+  background: var(--a-surface);
+  border: 1px solid var(--a-border);
+  border-radius: var(--a-radius);
+  padding: 1.05rem 1.1rem;
+  box-shadow: var(--a-shadow);
+  color: var(--a-text);
+  font: inherit;
+  cursor: default;
+  display: grid;
+  gap: 0.35rem;
+  transition: border-color 0.2s, transform 0.15s ease;
+}
+
+button.dash-card {
+  cursor: pointer;
+}
+
+button.dash-card:hover {
+  border-color: #3a4a70;
+  transform: translateY(-1px);
+}
+
+.dash-card--accent {
+  border-color: rgba(77, 157, 255, 0.45);
+  background:
+    linear-gradient(145deg, rgba(77, 157, 255, 0.12), transparent 60%),
+    var(--a-surface);
+}
+
+.dash-card__label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--a-muted);
+}
+
+.dash-card__value {
+  font-family: var(--a-font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.dash-card__hint {
+  font-size: 0.82rem;
+  color: var(--a-soft);
+}
+
+.dash-panels {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 900px) {
+  .dash-panels {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.dash-panel {
+  background: var(--a-surface);
+  border: 1px solid var(--a-border);
+  border-radius: var(--a-radius);
+  padding: 1.15rem 1.2rem;
+  box-shadow: var(--a-shadow);
+}
+
+.dash-panel__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.dash-panel__head h3,
+.rdv-form h3 {
+  margin: 0;
+  font-family: var(--a-font-display);
+  font-size: 1.05rem;
+}
+
+.dash-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.dash-list button {
+  width: 100%;
+  text-align: left;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.2rem 0.75rem;
+  align-items: center;
+  background: var(--a-surface-2);
+  border: 1px solid var(--a-border);
+  border-radius: 10px;
+  padding: 0.75rem 0.9rem;
+  color: var(--a-text);
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.dash-list button:hover {
+  border-color: #3a4a70;
+}
+
+.dash-list strong {
+  grid-column: 2;
+}
+
+.dash-list span:nth-of-type(2),
+.dash-list time,
+.dash-list span:last-child {
+  grid-column: 2;
+  font-size: 0.8rem;
+  color: var(--a-muted);
+}
+
+.dash-list .badge,
+.dash-list .rdv-pill {
+  grid-row: 1 / span 3;
+}
+
+.rdv-pill {
+  display: inline-flex;
+  padding: 0.28rem 0.55rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: rgba(77, 157, 255, 0.15);
+  color: var(--a-blue);
+}
+
+.rdv-pill--termine {
+  background: rgba(52, 196, 112, 0.15);
+  color: var(--a-green);
+}
+
+.rdv-pill--annule {
+  background: rgba(255, 71, 87, 0.12);
+  color: var(--a-red);
+}
+
+.rdv-pill--en_cours {
+  background: rgba(238, 177, 21, 0.15);
+  color: #eeb115;
+}
+
+/* ================================================================
+   Agenda / calendrier
+================================================================ */
+.agenda-layout {
+  display: grid;
+  gap: 1.1rem;
+}
+
+@media (min-width: 980px) {
+  .agenda-layout {
+    grid-template-columns: 1.05fr 0.95fr;
+    align-items: start;
+  }
+}
+
+.cal {
+  background: var(--a-surface);
+  border: 1px solid var(--a-border);
+  border-radius: var(--a-radius);
+  padding: 1rem;
+  box-shadow: var(--a-shadow);
+}
+
+.cal__nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+.cal__nav strong {
+  font-family: var(--a-font-display);
+  font-size: 1.05rem;
+  text-transform: capitalize;
+}
+
+.cal__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.3rem;
+  margin-bottom: 0.35rem;
+}
+
+.cal__weekdays span {
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--a-muted);
+  padding: 0.25rem 0;
+}
+
+.cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.3rem;
+}
+
+.cal__day {
+  position: relative;
+  min-height: 3.2rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: var(--a-surface-2);
+  color: var(--a-text);
+  font: inherit;
+  cursor: pointer;
+  padding: 0.35rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.cal__day span {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.cal__day em {
+  font-style: normal;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: var(--a-blue);
+  color: #0a1020;
+  border-radius: 999px;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  display: inline-grid;
+  place-items: center;
+  padding: 0 0.3rem;
+}
+
+.cal__day.is-out {
+  opacity: 0.35;
+}
+
+.cal__day.is-today {
+  border-color: rgba(77, 157, 255, 0.45);
+}
+
+.cal__day.is-selected {
+  border-color: var(--a-blue);
+  box-shadow: 0 0 0 2px rgba(77, 157, 255, 0.2);
+}
+
+.cal__day.has-events {
+  background: rgba(77, 157, 255, 0.1);
+}
+
+.cal__day:hover {
+  border-color: #3a4a70;
+}
+
+.agenda-side {
+  display: grid;
+  gap: 1rem;
+}
+
+.rdv-day-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.rdv-day-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.85rem 0.95rem;
+  border-radius: 10px;
+  background: var(--a-surface-2);
+  border: 1px solid var(--a-border);
+}
+
+.rdv-day-item strong {
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.rdv-day-item p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--a-soft);
+}
+
+.rdv-day-item a {
+  display: inline-block;
+  margin-top: 0.35rem;
+  color: var(--a-blue);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.rdv-day-item__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.rdv-day-item__actions .btn {
+  font-size: 0.78rem;
+  padding: 0.4rem 0.65rem;
+}
+
+.rdv-form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.rdv-form__row {
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (min-width: 560px) {
+  .rdv-form__row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .rdv-form__row:first-of-type {
+    grid-template-columns: 1.2fr 1fr 0.8fr;
+  }
+}
+
+.rdv-form label,
+.admin__hours label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--a-soft);
+}
+
+.rdv-form input,
+.rdv-form select,
+.rdv-form textarea,
+.admin__hours input,
+.devis-actions select {
+  font: inherit;
+  color: var(--a-text);
+  background: var(--a-surface-2);
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--a-border);
+  border-radius: 9px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.rdv-form input:focus,
+.rdv-form select:focus,
+.rdv-form textarea:focus {
+  outline: none;
+  border-color: var(--a-blue);
+  box-shadow: 0 0 0 4px rgba(77, 157, 255, 0.18);
+}
+
+.rdv-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.rdv-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 640px) {
+  .dash-head {
+    flex-direction: column;
+  }
+
+  .rdv-day-item {
+    flex-direction: column;
+  }
+
+  .rdv-day-item__actions {
+    flex-direction: row;
+  }
+}
