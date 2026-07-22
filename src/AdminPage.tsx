@@ -667,7 +667,7 @@ export default function AdminPage() {
         <div className="admin__theme">
           <p className="admin__muted">
             Choisissez le mode (clair / sombre) et une palette pour le site
-            public. Le panel gérant reste toujours en clair. Après
+            public. Le panel gérant reste toujours en sombre. Après
             enregistrement, ouvrez « Voir le site » pour vérifier le rendu.
           </p>
 

@@ -1,35 +1,36 @@
 /* ================================================================
-   Panel gérant — design clair, toujours en mode light
-   (le mode sombre ne s'applique qu'au site public)
+   Panel gérant — design sombre permanent
+   (indépendant du mode clair/sombre du site public)
 ================================================================ */
 .admin,
 .admin-login {
-  color-scheme: light;
-  color: #101828;
-  --a-text: #101828;
-  --a-soft: #475467;
-  --a-muted: #667085;
-  --a-bg: #f4f6fa;
-  --a-surface: #ffffff;
-  --a-border: #e4e9f0;
-  --a-navy: #0a1a3a;
-  --a-blue: #0066c8;
-  --a-blue-deep: #004a96;
-  --a-red: #d4001a;
-  --a-red-deep: #a80015;
-  --a-green: #108c46;
+  color-scheme: dark;
+  color: #e7ecf5;
+  --a-text: #e7ecf5;
+  --a-soft: #aeb9cc;
+  --a-muted: #7e8ba2;
+  --a-bg: #0a1020;
+  --a-surface: #121a2e;
+  --a-surface-2: #1a2440;
+  --a-border: #232f4c;
+  --a-navy: #0d1526;
+  --a-blue: #4d9dff;
+  --a-blue-deep: #2f7fe6;
+  --a-red: #ff4757;
+  --a-red-deep: #d4001a;
+  --a-green: #34c470;
   --a-radius: 12px;
-  --a-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 16px -6px rgba(16, 24, 40, 0.07);
+  --a-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 6px 20px -8px rgba(0, 0, 0, 0.45);
   --a-font-display: var(--font-display, "Syne", sans-serif);
 
   /* alias pour composants publics éventuels */
-  --text: #101828;
-  --muted: #667085;
-  --bg: #f4f6fa;
-  --surface: #ffffff;
-  --border: #e4e9f0;
-  --brand: #0066c8;
-  --accent: #d4001a;
+  --text: #e7ecf5;
+  --muted: #7e8ba2;
+  --bg: #0a1020;
+  --surface: #121a2e;
+  --border: #232f4c;
+  --brand: #4d9dff;
+  --accent: #ff4757;
 }
 
 /* ================================================================
@@ -41,9 +42,9 @@
   place-items: center;
   padding: 1.5rem;
   background:
-    radial-gradient(ellipse 60% 45% at 15% 0%, rgba(0, 102, 200, 0.12), transparent),
-    radial-gradient(ellipse 50% 40% at 100% 100%, rgba(212, 0, 26, 0.06), transparent),
-    #f4f6fa;
+    radial-gradient(ellipse 60% 45% at 15% 0%, rgba(77, 157, 255, 0.14), transparent),
+    radial-gradient(ellipse 50% 40% at 100% 100%, rgba(255, 71, 87, 0.08), transparent),
+    var(--a-bg);
 }
 
 .admin-login__card {
@@ -54,7 +55,7 @@
   border-radius: 16px;
   display: grid;
   gap: 0.9rem;
-  box-shadow: 0 24px 60px -24px rgba(10, 26, 58, 0.25);
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.6);
 }
 
 .admin-login__brand {
@@ -99,7 +100,7 @@
 .devis-actions select {
   font: inherit;
   color: var(--a-text);
-  background: #fbfcfe;
+  background: var(--a-surface-2);
   padding: 0.8rem 0.95rem;
   border: 1px solid var(--a-border);
   border-radius: 9px;
@@ -111,8 +112,8 @@
 .devis-actions select:focus {
   outline: none;
   border-color: var(--a-blue);
-  background: #fff;
-  box-shadow: 0 0 0 4px rgba(0, 102, 200, 0.12);
+  background: var(--a-surface-2);
+  box-shadow: 0 0 0 4px rgba(77, 157, 255, 0.18);
 }
 
 .admin-login button,
@@ -131,7 +132,7 @@
 
 .admin-login button {
   background: var(--a-blue);
-  color: #fff;
+  color: #0a1020;
   padding: 0.85rem 1.1rem;
   margin-top: 0.3rem;
 }
@@ -170,15 +171,15 @@
 }
 
 .admin-alert {
-  background: rgba(212, 0, 26, 0.07);
-  border: 1px solid rgba(212, 0, 26, 0.25);
-  color: var(--a-red-deep);
+  background: rgba(255, 71, 87, 0.12);
+  border: 1px solid rgba(255, 71, 87, 0.35);
+  color: #ff8a94;
 }
 
 .admin-ok {
-  background: rgba(16, 140, 70, 0.08);
-  border: 1px solid rgba(16, 140, 70, 0.28);
-  color: #0a5c2e;
+  background: rgba(52, 196, 112, 0.12);
+  border: 1px solid rgba(52, 196, 112, 0.35);
+  color: #6fdc9d;
 }
 
 .admin > .admin-alert,
@@ -206,7 +207,8 @@
   padding: 0.9rem 1.5rem;
   background: var(--a-navy);
   color: #fff;
-  box-shadow: 0 4px 20px -8px rgba(10, 26, 58, 0.45);
+  border-bottom: 1px solid var(--a-border);
+  box-shadow: 0 4px 20px -8px rgba(0, 0, 0, 0.6);
 }
 
 .admin__brand {
@@ -309,12 +311,12 @@
   border-radius: 999px;
   font-size: 0.72rem;
   font-weight: 700;
-  background: #e8edf4;
+  background: var(--a-surface-2);
   color: var(--a-soft);
 }
 
 .admin__tabs button.is-active .tab-badge {
-  background: rgba(0, 102, 200, 0.12);
+  background: rgba(77, 157, 255, 0.16);
   color: var(--a-blue);
 }
 
@@ -361,13 +363,13 @@
 }
 
 .admin__filters button:hover {
-  border-color: #b9c6d8;
+  border-color: #3a4a70;
 }
 
 .admin__filters button.is-active {
-  background: var(--a-navy);
-  color: #fff;
-  border-color: var(--a-navy);
+  background: var(--a-blue);
+  color: #0a1020;
+  border-color: var(--a-blue);
 }
 
 .admin__filters .ghost {
@@ -415,13 +417,13 @@
 }
 
 .devis-row:hover {
-  border-color: #b9c6d8;
+  border-color: #3a4a70;
   transform: translateY(-1px);
 }
 
 .devis-row.is-active {
   border-color: var(--a-blue);
-  box-shadow: 0 0 0 3px rgba(0, 102, 200, 0.14), var(--a-shadow);
+  box-shadow: 0 0 0 3px rgba(77, 157, 255, 0.2), var(--a-shadow);
 }
 
 .devis-row strong {
@@ -446,22 +448,22 @@
 }
 
 .badge--nouveau {
-  background: rgba(212, 0, 26, 0.1);
+  background: rgba(255, 71, 87, 0.14);
   color: var(--a-red);
 }
 
 .badge--en_cours {
-  background: rgba(0, 102, 200, 0.1);
+  background: rgba(77, 157, 255, 0.14);
   color: var(--a-blue);
 }
 
 .badge--traite {
-  background: rgba(16, 140, 70, 0.1);
-  color: #0a5c2e;
+  background: rgba(52, 196, 112, 0.14);
+  color: var(--a-green);
 }
 
 .badge--archive {
-  background: #eceff4;
+  background: var(--a-surface-2);
   color: var(--a-muted);
 }
 
@@ -543,7 +545,7 @@
 
 .devis-message {
   white-space: pre-wrap;
-  background: #f7f9fc;
+  background: var(--a-surface-2);
   border: 1px solid var(--a-border);
   padding: 0.9rem 1rem;
   border-radius: 9px;
@@ -565,7 +567,7 @@
 
 .devis-photos a:hover {
   transform: scale(1.03);
-  box-shadow: 0 10px 24px -10px rgba(16, 24, 40, 0.35);
+  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.6);
 }
 
 .devis-photos img {
@@ -599,8 +601,9 @@
    Boutons (scopés .admin pour ne pas fuir sur le site public)
 ================================================================ */
 .admin .btn {
-  background: var(--a-navy);
-  color: #fff;
+  background: var(--a-surface-2);
+  border: 1px solid var(--a-border);
+  color: var(--a-text);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -610,28 +613,32 @@
 
 .admin .btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 18px -8px rgba(10, 26, 58, 0.5);
+  border-color: #3a4a70;
+  box-shadow: 0 8px 18px -8px rgba(0, 0, 0, 0.6);
 }
 
 .admin .btn.primary {
   background: var(--a-blue);
+  border-color: var(--a-blue);
+  color: #0a1020;
 }
 
 .admin .btn.primary:hover {
   background: var(--a-blue-deep);
+  border-color: var(--a-blue-deep);
 }
 
 .admin .btn.danger {
   background: transparent;
   color: var(--a-red);
-  border: 1px solid rgba(212, 0, 26, 0.35);
+  border: 1px solid rgba(255, 71, 87, 0.4);
 }
 
 .admin .btn.danger:hover {
   background: var(--a-red);
-  color: #fff;
+  color: #0a1020;
   border-color: var(--a-red);
-  box-shadow: 0 8px 18px -8px rgba(212, 0, 26, 0.5);
+  box-shadow: 0 8px 18px -8px rgba(255, 71, 87, 0.5);
 }
 
 /* ================================================================
@@ -717,7 +724,7 @@
 
 .pellicule-admin-grid li:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 30px -14px rgba(16, 24, 40, 0.25);
+  box-shadow: 0 14px 30px -14px rgba(0, 0, 0, 0.6);
 }
 
 .pellicule-admin-grid img {
@@ -833,14 +840,14 @@
 
 .mode-card:hover,
 .theme-card:hover {
-  border-color: #b9c6d8;
+  border-color: #3a4a70;
   transform: translateY(-1px);
 }
 
 .mode-card.is-active,
 .theme-card.is-active {
   border-color: var(--a-blue);
-  box-shadow: 0 0 0 3px rgba(0, 102, 200, 0.14), var(--a-shadow);
+  box-shadow: 0 0 0 3px rgba(77, 157, 255, 0.2), var(--a-shadow);
 }
 
 .mode-card strong,
@@ -878,6 +885,6 @@
   width: 1.7rem;
   height: 1.7rem;
   border-radius: 999px;
-  border: 2px solid #fff;
-  box-shadow: 0 1px 4px rgba(16, 24, 40, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
