@@ -686,7 +686,6 @@ function useReveal(): RefObject<HTMLDivElement | null> {
     const el = ref.current;
     if (!el) return;
 
-    const targets = el.querySelectorAll(".reveal, .atout");
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -699,8 +698,21 @@ function useReveal(): RefObject<HTMLDivElement | null> {
       { threshold: 0.15, rootMargin: "0px 0px -40px 0px" },
     );
 
-    targets.forEach((t) => io.observe(t));
-    return () => io.disconnect();
+    const observeAll = () => {
+      el.querySelectorAll(".reveal:not(.is-visible)").forEach((t) =>
+        io.observe(t),
+      );
+    };
+    observeAll();
+
+    // Observe aussi les éléments ajoutés après coup (avis / pellicule via API)
+    const mo = new MutationObserver(observeAll);
+    mo.observe(el, { childList: true, subtree: true });
+
+    return () => {
+      io.disconnect();
+      mo.disconnect();
+    };
   }, []);
 
   return ref;
@@ -716,6 +728,73 @@ function PhoneIcon() {
         strokeLinejoin="round"
       />
     </svg>
+  );
+}
+
+function MailIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M4 6.5h16v11H4v-11Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+      <path
+        d="m4.5 7.5 7.5 5.5 7.5-5.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** Compteur animé au scroll (stats) */
+function Counter({
+  to,
+  decimals = 0,
+  suffix = "",
+}: {
+  to: number;
+  decimals?: number;
+  suffix?: string;
+}) {
+  const ref = useRef<HTMLSpanElement | null>(null);
+  const [display, setDisplay] = useState("0");
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let raf = 0;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0].isIntersecting) return;
+        io.disconnect();
+        const start = performance.now();
+        const duration = 1600;
+        const tick = (now: number) => {
+          const p = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          setDisplay((to * eased).toFixed(decimals).replace(".", ","));
+          if (p < 1) raf = requestAnimationFrame(tick);
+        };
+        raf = requestAnimationFrame(tick);
+      },
+      { threshold: 0.4 },
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }, [to, decimals]);
+
+  return (
+    <span ref={ref}>
+      {display}
+      {suffix}
+    </span>
   );
 }
 
@@ -1059,8 +1138,8 @@ export default function App() {
             <a href="#services">Services</a>
             <a href="#atelier">L’atelier</a>
             <a href="#pellicule">Pellicule</a>
-            <a href="#avis">Avis</a>
             <a href="#devis">Devis</a>
+            <a href="#avis">Avis</a>
           </nav>
 
           <button
@@ -1075,10 +1154,16 @@ export default function App() {
             <span />
           </button>
 
-          <a className="nav__phone" href={`tel:${PHONE_TEL}`}>
-            <PhoneIcon />
-            {PHONE}
-          </a>
+          <div className="nav__contact">
+            <a className="nav__phone" href={`tel:${PHONE_TEL}`}>
+              <PhoneIcon />
+              {PHONE}
+            </a>
+            <a className="nav__email" href={`mailto:${CONTACT_EMAIL}`}>
+              <MailIcon />
+              {CONTACT_EMAIL}
+            </a>
+          </div>
         </div>
 
         <div className="nav__drawer">
@@ -1091,11 +1176,14 @@ export default function App() {
           <a href="#pellicule" onClick={closeMenu}>
             Pellicule
           </a>
+          <a href="#devis" onClick={closeMenu}>
+            Devis
+          </a>
           <a href="#avis" onClick={closeMenu}>
             Avis
           </a>
-          <a href="#devis" onClick={closeMenu}>
-            Devis
+          <a href={`mailto:${CONTACT_EMAIL}`} onClick={closeMenu}>
+            {CONTACT_EMAIL}
           </a>
         </div>
       </header>
@@ -1112,31 +1200,60 @@ export default function App() {
             />
           </div>
           <div className="hero__content">
-            <p className="hero__brand">
-              <img
-                src="/logo.png"
-                alt="S AUTO — Carrosserie & Pare-Brise"
-                width={760}
-                height={900}
-              />
+            <p className="hero__kicker">
+              <span className="hero__kicker-line" />
+              Atelier carrosserie — Saint-Genis-Laval
             </p>
             <h1 className="hero__headline">
-              Carrosserie & pare-brise à Saint-Genis-Laval
+              Votre véhicule mérite
+              <br />
+              <em>une finition parfaite.</em>
             </h1>
             <p className="hero__lead">
-              Atelier indépendant : carrosserie, peinture et vitrage — toutes
-              marques, toutes assurances. Clients de Lyon et sa région.
+              Carrosserie, peinture et pare-brise — toutes marques, toutes
+              assurances. Atelier indépendant au service de Lyon et sa région.
             </p>
             <div className="hero__actions">
-              <a className="btn btn--primary" href={`tel:${PHONE_TEL}`}>
-                Appeler le {PHONE}
-              </a>
-              <a className="btn btn--ghost" href="#devis">
+              <a className="btn btn--primary" href="#devis">
                 Demander un devis
+                <span className="btn__arrow" aria-hidden="true">
+                  →
+                </span>
+              </a>
+              <a className="btn btn--ghost" href={`tel:${PHONE_TEL}`}>
+                <PhoneIcon />
+                {PHONE}
               </a>
             </div>
+            <ul className="hero__chips" aria-label="Points forts">
+              <li>Toutes assurances</li>
+              <li>Toutes marques</li>
+              <li>Véhicule de courtoisie</li>
+            </ul>
           </div>
+          <a className="hero__scroll" href="#services" aria-label="Découvrir">
+            <span />
+          </a>
         </section>
+
+        <div className="marquee" aria-hidden="true">
+          <div className="marquee__track">
+            {[0, 1].map((n) => (
+              <span key={n} className="marquee__group">
+                <span>Carrosserie</span>
+                <span className="marquee__dot">✦</span>
+                <span>Peinture</span>
+                <span className="marquee__dot">✦</span>
+                <span>Pare-brise</span>
+                <span className="marquee__dot">✦</span>
+                <span>Assurances & sinistres</span>
+                <span className="marquee__dot">✦</span>
+                <span>Véhicule de courtoisie</span>
+                <span className="marquee__dot">✦</span>
+              </span>
+            ))}
+          </div>
+        </div>
 
         <section id="services" className="section services">
           <div className="container">
@@ -1152,13 +1269,19 @@ export default function App() {
             </div>
 
             <div className="services__grid">
-              {SERVICES.map((s) => (
-                <article key={s.num} className="service reveal">
+              {SERVICES.map((s, i) => (
+                <article
+                  key={s.num}
+                  className="service reveal"
+                  style={{ transitionDelay: `${i * 90}ms` }}
+                >
                   <span className="service__num">{s.num}</span>
-                  <div>
-                    <h3 className="service__name">{s.name}</h3>
-                  </div>
+                  <h3 className="service__name">{s.name}</h3>
                   <p className="service__desc">{s.desc}</p>
+                  <a className="service__link" href="#devis">
+                    Demander un devis
+                    <span aria-hidden="true">→</span>
+                  </a>
                 </article>
               ))}
             </div>
@@ -1178,9 +1301,40 @@ export default function App() {
               </p>
             </div>
 
+            <div className="stats reveal" role="list">
+              <div className="stats__item" role="listitem">
+                <strong>
+                  <Counter to={avisAverage} decimals={1} suffix="/5" />
+                </strong>
+                <span>Note moyenne</span>
+              </div>
+              <div className="stats__item" role="listitem">
+                <strong>
+                  <Counter to={reviews.length} />
+                </strong>
+                <span>Avis clients</span>
+              </div>
+              <div className="stats__item" role="listitem">
+                <strong>
+                  <Counter to={6} suffix="j/7" />
+                </strong>
+                <span>Atelier ouvert</span>
+              </div>
+              <div className="stats__item" role="listitem">
+                <strong>
+                  <Counter to={100} suffix="%" />
+                </strong>
+                <span>Toutes marques</span>
+              </div>
+            </div>
+
             <div className="atouts__grid">
-              {ATOUTS.map((a) => (
-                <article key={a.title} className="atout reveal">
+              {ATOUTS.map((a, i) => (
+                <article
+                  key={a.title}
+                  className="atout reveal"
+                  style={{ transitionDelay: `${i * 110}ms` }}
+                >
                   <div className="atout__line" />
                   <h3>{a.title}</h3>
                   <p>{a.text}</p>
@@ -1202,8 +1356,13 @@ export default function App() {
             </div>
 
             <ol className="process__steps">
-              {STEPS.map((s) => (
-                <li key={s.title} className="step reveal">
+              {STEPS.map((s, i) => (
+                <li
+                  key={s.title}
+                  className="step reveal"
+                  style={{ transitionDelay: `${i * 110}ms` }}
+                >
+                  <span className="step__num">{String(i + 1).padStart(2, "0")}</span>
                   <h3>{s.title}</h3>
                   <p>{s.text}</p>
                 </li>
@@ -1254,142 +1413,6 @@ export default function App() {
               >
                 Voir sur Google
               </a>
-            </div>
-          </div>
-        </section>
-
-        <section id="avis" className="section avis">
-          <div className="container">
-            <div className="section__head reveal">
-              <p className="section__label">Avis clients</p>
-              <h2 className="section__title">La confiance se voit sur la route</h2>
-            </div>
-
-            <div className="avis__score reveal">
-              <strong>{avisAverage.toFixed(1).replace(".", ",")}</strong>
-              <div>
-                <div className="avis__stars" aria-hidden="true">
-                  {starsLabel(Math.round(avisAverage))}
-                </div>
-                <span>
-                  {reviews.length} avis Google · Saint-Genis-Laval
-                </span>
-              </div>
-              <button
-                type="button"
-                className="btn btn--dark avis__cta"
-                onClick={() => {
-                  setAvisOpen((v) => !v);
-                  setAvisStatus("idle");
-                  setAvisError("");
-                }}
-              >
-                {avisOpen ? "Fermer" : "Laisser un avis"}
-              </button>
-            </div>
-
-            {avisOpen && (
-              <form
-                className="avis__form reveal is-visible"
-                onSubmit={(e) => void handleAvisSubmit(e)}
-              >
-                <h3>Votre avis</h3>
-                <p>Partagez votre expérience à l’atelier S AUTO.</p>
-
-                <div className="field">
-                  <span id="avis-stars-label">Note sur 5 *</span>
-                  <div
-                    className="star-picker"
-                    role="radiogroup"
-                    aria-labelledby="avis-stars-label"
-                  >
-                    {[1, 2, 3, 4, 5].map((n) => {
-                      const active = (avisHover || avisStars) >= n;
-                      return (
-                        <button
-                          key={n}
-                          type="button"
-                          role="radio"
-                          aria-checked={avisStars === n}
-                          aria-label={`${n} étoile${n > 1 ? "s" : ""}`}
-                          className={
-                            active ? "star-picker__btn is-on" : "star-picker__btn"
-                          }
-                          onMouseEnter={() => setAvisHover(n)}
-                          onMouseLeave={() => setAvisHover(0)}
-                          onClick={() => setAvisStars(n)}
-                        >
-                          ★
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div className="field">
-                  <label htmlFor="avis-name">Nom *</label>
-                  <input
-                    id="avis-name"
-                    name="avis-name"
-                    required
-                    minLength={2}
-                    maxLength={80}
-                    autoComplete="name"
-                    value={avisName}
-                    onChange={(e) => setAvisName(e.target.value)}
-                  />
-                </div>
-
-                <div className="field">
-                  <label htmlFor="avis-message">Message (optionnel)</label>
-                  <textarea
-                    id="avis-message"
-                    name="avis-message"
-                    maxLength={800}
-                    placeholder="Ce que vous avez apprécié…"
-                    value={avisMessage}
-                    onChange={(e) => setAvisMessage(e.target.value)}
-                  />
-                </div>
-
-                {avisError && (
-                  <p className="form-error" role="alert">
-                    {avisError}
-                  </p>
-                )}
-
-                <button
-                  type="submit"
-                  className="btn btn--primary"
-                  disabled={avisStatus === "loading"}
-                >
-                  {avisStatus === "loading" ? "Envoi…" : "Publier mon avis"}
-                </button>
-              </form>
-            )}
-
-            {avisStatus === "sent" && !avisOpen && (
-              <p className="form-success avis__thanks" role="status">
-                Merci pour votre avis !
-              </p>
-            )}
-
-            <div className="avis__grid">
-              {reviews.map((r) => (
-                <article key={r.id} className="avis__item reveal">
-                  <div className="avis__item-stars" aria-label={`${r.stars} sur 5`}>
-                    {starsLabel(r.stars)}
-                  </div>
-                  {r.message ? (
-                    <blockquote>« {r.message} »</blockquote>
-                  ) : (
-                    <blockquote className="avis__item-empty">
-                      Avis sans commentaire
-                    </blockquote>
-                  )}
-                  <cite>— {r.name}</cite>
-                </article>
-              ))}
             </div>
           </div>
         </section>
@@ -1606,27 +1629,214 @@ export default function App() {
             </div>
           </div>
         </section>
+        <section id="avis" className="section avis">
+          <div className="container">
+            <div className="section__head reveal">
+              <p className="section__label">Avis clients</p>
+              <h2 className="section__title">La confiance se voit sur la route</h2>
+            </div>
+
+            <div className="avis__score reveal">
+              <strong>{avisAverage.toFixed(1).replace(".", ",")}</strong>
+              <div>
+                <div className="avis__stars" aria-hidden="true">
+                  {starsLabel(Math.round(avisAverage))}
+                </div>
+                <span>
+                  {reviews.length} avis Google · Saint-Genis-Laval
+                </span>
+              </div>
+              <button
+                type="button"
+                className="btn btn--dark avis__cta"
+                onClick={() => {
+                  setAvisOpen((v) => !v);
+                  setAvisStatus("idle");
+                  setAvisError("");
+                }}
+              >
+                {avisOpen ? "Fermer" : "Laisser un avis"}
+              </button>
+            </div>
+
+            {avisOpen && (
+              <form
+                className="avis__form reveal is-visible"
+                onSubmit={(e) => void handleAvisSubmit(e)}
+              >
+                <h3>Votre avis</h3>
+                <p>Partagez votre expérience à l’atelier S AUTO.</p>
+
+                <div className="field">
+                  <span id="avis-stars-label">Note sur 5 *</span>
+                  <div
+                    className="star-picker"
+                    role="radiogroup"
+                    aria-labelledby="avis-stars-label"
+                  >
+                    {[1, 2, 3, 4, 5].map((n) => {
+                      const active = (avisHover || avisStars) >= n;
+                      return (
+                        <button
+                          key={n}
+                          type="button"
+                          role="radio"
+                          aria-checked={avisStars === n}
+                          aria-label={`${n} étoile${n > 1 ? "s" : ""}`}
+                          className={
+                            active ? "star-picker__btn is-on" : "star-picker__btn"
+                          }
+                          onMouseEnter={() => setAvisHover(n)}
+                          onMouseLeave={() => setAvisHover(0)}
+                          onClick={() => setAvisStars(n)}
+                        >
+                          ★
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="field">
+                  <label htmlFor="avis-name">Nom *</label>
+                  <input
+                    id="avis-name"
+                    name="avis-name"
+                    required
+                    minLength={2}
+                    maxLength={80}
+                    autoComplete="name"
+                    value={avisName}
+                    onChange={(e) => setAvisName(e.target.value)}
+                  />
+                </div>
+
+                <div className="field">
+                  <label htmlFor="avis-message">Message (optionnel)</label>
+                  <textarea
+                    id="avis-message"
+                    name="avis-message"
+                    maxLength={800}
+                    placeholder="Ce que vous avez apprécié…"
+                    value={avisMessage}
+                    onChange={(e) => setAvisMessage(e.target.value)}
+                  />
+                </div>
+
+                {avisError && (
+                  <p className="form-error" role="alert">
+                    {avisError}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  className="btn btn--primary"
+                  disabled={avisStatus === "loading"}
+                >
+                  {avisStatus === "loading" ? "Envoi…" : "Publier mon avis"}
+                </button>
+              </form>
+            )}
+
+            {avisStatus === "sent" && !avisOpen && (
+              <p className="form-success avis__thanks" role="status">
+                Merci pour votre avis !
+              </p>
+            )}
+
+            <div className="avis__grid">
+              {reviews.map((r, i) => (
+                <article
+                  key={r.id}
+                  className="avis__item reveal"
+                  style={{ transitionDelay: `${(i % 3) * 100}ms` }}
+                >
+                  <div className="avis__item-stars" aria-label={`${r.stars} sur 5`}>
+                    {starsLabel(r.stars)}
+                  </div>
+                  {r.message ? (
+                    <blockquote>« {r.message} »</blockquote>
+                  ) : (
+                    <blockquote className="avis__item-empty">
+                      Avis sans commentaire
+                    </blockquote>
+                  )}
+                  <cite>— {r.name}</cite>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="cta-band" aria-label="Contact rapide">
+          <div className="container cta-band__inner reveal">
+            <div>
+              <h2>Un choc, une rayure, un impact&nbsp;?</h2>
+              <p>Envoyez vos photos — devis rapide, sans déplacement.</p>
+            </div>
+            <div className="cta-band__actions">
+              <a className="btn btn--light" href="#devis">
+                Devis en ligne
+              </a>
+              <a className="btn btn--ghost" href={`tel:${PHONE_TEL}`}>
+                <PhoneIcon />
+                {PHONE}
+              </a>
+            </div>
+          </div>
+        </section>
       </main>
 
       <footer className="footer">
         <div className="container">
           <div className="footer__top">
-            <div>
+            <div className="footer__col footer__col--brand">
               <p className="footer__brand">
-                <img
-                  src="/logo.png"
-                  alt="S AUTO"
-                  width={160}
-                  height={190}
-                />
+                <img src="/logo.png" alt="S AUTO" width={160} height={190} />
               </p>
               <p className="footer__tag">
-                Carrosserie · Peinture · Pare-brise — Saint-Genis-Laval
+                Carrosserie · Peinture · Pare-brise
+                <br />
+                Saint-Genis-Laval, près de Lyon
               </p>
             </div>
-            <a className="btn btn--primary footer__cta" href={`tel:${PHONE_TEL}`}>
-              {PHONE}
-            </a>
+            <div className="footer__col">
+              <h3>Contact</h3>
+              <ul className="footer__list">
+                <li>
+                  <a href={`tel:${PHONE_TEL}`}>{PHONE}</a>
+                </li>
+                <li>
+                  <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+                </li>
+                <li>
+                  <a href={MAPS_URL} target="_blank" rel="noreferrer">
+                    {ADDRESS}
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div className="footer__col">
+              <h3>Navigation</h3>
+              <ul className="footer__list">
+                <li>
+                  <a href="#services">Services</a>
+                </li>
+                <li>
+                  <a href="#atelier">L’atelier</a>
+                </li>
+                <li>
+                  <a href="#pellicule">Pellicule</a>
+                </li>
+                <li>
+                  <a href="#devis">Devis</a>
+                </li>
+                <li>
+                  <a href="#avis">Avis</a>
+                </li>
+              </ul>
+            </div>
           </div>
           <div className="footer__bottom">
             <p>© {new Date().getFullYear()} S AUTO — Tous droits réservés</p>
