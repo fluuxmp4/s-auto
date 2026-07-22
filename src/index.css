@@ -215,7 +215,8 @@ button {
   color: inherit;
 }
 
-ul {
+ul,
+ol {
   list-style: none;
 }
 
@@ -643,8 +644,12 @@ ul {
 }
 
 @media (max-width: 819px) {
+  /* backdrop-filter transformerait la nav en containing block :
+     le drawer position:fixed serait piégé dans la barre de 84px */
   .nav.is-open {
     background: var(--bg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   .nav__drawer {
@@ -652,10 +657,12 @@ ul {
     inset: var(--nav-h) 0 0;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.4rem;
-    padding: 2rem 1.5rem 3rem;
+    padding: 1.2rem 1.5rem calc(2rem + env(safe-area-inset-bottom));
     background: var(--bg);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.35s var(--ease);
