@@ -1481,10 +1481,6 @@ export default function App() {
             <div className="section__head reveal">
               <p className="section__label">Devis</p>
               <h2 className="section__title">Parlons de votre véhicule</h2>
-              <p className="section__text">
-                Atelier situé zone d’activités Chapoly-Laval — parking accessible,
-                entrée PMR.
-              </p>
             </div>
 
             <div className="contact__layout">
