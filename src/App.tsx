@@ -659,8 +659,8 @@ const ATOUTS = [
     text: "Atelier indépendant à taille humaine : suivi personnalisé et dates de restitution respectées.",
   },
   {
-    title: "Véhicule de courtoisie",
-    text: "Restez mobile pendant les réparations grâce à notre véhicule de courtoisie (selon disponibilité).",
+    title: "Nos véhicules de courtoisie",
+    text: "Restez mobile pendant les réparations grâce à nos véhicules de courtoisie (selon disponibilité).",
   },
 ];
 
@@ -1275,7 +1275,7 @@ export default function App() {
             <ul className="hero__chips" aria-label="Points forts">
               <li>Toutes assurances</li>
               <li>Toutes marques</li>
-              <li>Véhicule de courtoisie</li>
+              <li>Nos véhicules de courtoisie</li>
             </ul>
           </div>
           <a className="hero__scroll" href="#services" aria-label="Découvrir">
@@ -1295,7 +1295,7 @@ export default function App() {
                 <span className="marquee__dot">✦</span>
                 <span>Assurances & sinistres</span>
                 <span className="marquee__dot">✦</span>
-                <span>Véhicule de courtoisie</span>
+                <span>Nos véhicules de courtoisie</span>
                 <span className="marquee__dot">✦</span>
               </span>
             ))}
